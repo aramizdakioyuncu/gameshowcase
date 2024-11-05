@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: appLightThemeData,
       darkTheme: appDarkThemeData,
-      themeMode: ThemeMode.light,
+      themeMode: ThemeMode.dark,
       initialRoute: AppPages.initial,
       locale: Get.deviceLocale,
       translationsKeys: AppTranslation.translationKeys,

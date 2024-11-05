@@ -11,44 +11,123 @@ class HomeView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text("title"),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text("hello".tr),
-            Text("language".tr),
-            Text(
-              'You have pushed the button this many times:'.tr,
-            ),
-            Obx(
-              () => Text(
-                '${controller.counter.value}',
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                Get.changeThemeMode(
-                    Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
-              },
-              icon: Icon(
-                Icons.dark_mode,
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                controller.incrementCounter();
-
-                // Get.toNamed("/game-info");
-                Get.offAndToNamed("/game-info");
-              },
-              child: const Text("Diğer Sayfaya Geç"),
-            )
-          ],
+        toolbarHeight: 104.0,
+        title: Image.asset(
+          'images/logo.png',
+          fit: BoxFit.contain,
+          height: 50,
         ),
+        centerTitle: true,
+        actions: [
+          ElevatedButton(
+            onPressed: () {},
+            child: const Row(
+              children: [
+                Icon(Icons.blur_circular),
+                SizedBox(width: 5),
+                Text('turkce'),
+              ],
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 14.0),
+            child: VerticalDivider(),
+          ),
+          ElevatedButton(
+            onPressed: () {},
+            child: const Row(
+              children: [
+                Icon(Icons.person),
+                SizedBox(width: 5),
+                Text('oturum ac'),
+              ],
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {},
+            child: const Padding(
+              padding: EdgeInsets.all(42.0),
+              child: Text('simdi oyna'),
+            ),
+          )
+        ],
+      ),
+      body: Column(
+        children: <Widget>[
+          Container(
+            color: Colors.black38,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: const Text(
+                      'oyun',
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: const Text(
+                      'oyun',
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: const Text(
+                      'oyun',
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: const Text(
+                      'oyun',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Text("hello".tr),
+          Text("language".tr),
+          Text(
+            'You have pushed the button this many times:'.tr,
+          ),
+          Obx(
+            () => Text(
+              '${controller.counter.value}',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              Get.changeThemeMode(
+                  Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
+            },
+            icon: const Icon(
+              Icons.dark_mode,
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              controller.incrementCounter();
+
+              // Get.toNamed("/game-info");
+              Get.toNamed("/game-info");
+            },
+            child: const Text("Diğer Sayfaya Geç"),
+          )
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: controller.incrementCounter,
