@@ -11,20 +11,31 @@ class HomeView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text("title"),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+            Text("hello".tr),
+            Text("language".tr),
+            Text(
+              'You have pushed the button this many times:'.tr,
             ),
             Obx(
               () => Text(
                 '${controller.counter.value}',
                 style: Theme.of(context).textTheme.headlineMedium,
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                Get.changeThemeMode(
+                    Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
+              },
+              icon: Icon(
+                Icons.dark_mode,
               ),
             ),
             ElevatedButton(
