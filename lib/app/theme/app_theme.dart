@@ -13,9 +13,10 @@ final ThemeData appDarkThemeData = ThemeData.dark().copyWith(
       ),
     ),
   ),
+  inputDecorationTheme: const InputDecorationTheme(
+    filled: true,
+    fillColor: Color.fromARGB(84, 89, 88, 88),
+  ),
 );
 final ThemeData appLightThemeData = ThemeData.light().copyWith(
-    // appBarTheme: const AppBarTheme(
-    //   backgroundColor: Colors.black,
-    // ),
     );

@@ -34,7 +34,9 @@ class HomeView extends StatelessWidget {
             child: VerticalDivider(),
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.toNamed("login");
+            },
             child: const Row(
               children: [
                 Icon(Icons.person),
@@ -118,15 +120,6 @@ class HomeView extends StatelessWidget {
               Icons.dark_mode,
             ),
           ),
-          ElevatedButton(
-            onPressed: () {
-              controller.incrementCounter();
-
-              // Get.toNamed("/game-info");
-              Get.toNamed("/game-info");
-            },
-            child: const Text("Diğer Sayfaya Geç"),
-          )
         ],
       ),
       floatingActionButton: FloatingActionButton(
