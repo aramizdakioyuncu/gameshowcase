@@ -26,7 +26,7 @@ class AddaccountView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   const Text(
-                    "hesap oluştur",
+                    "HESAP OLUŞTUR",
                     style: TextStyle(
                         fontSize: 25,
                         color: Colors.orange,
@@ -35,6 +35,7 @@ class AddaccountView extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.all(8.0),
                     child: TextField(
+                      controller: controller.name.value,
                       decoration: InputDecoration(
                         labelText: 'AD',
                         border: OutlineInputBorder(),
@@ -44,6 +45,7 @@ class AddaccountView extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.all(8.0),
                     child: TextField(
+                      controller: controller.lastname.value,
                       decoration: InputDecoration(
                         labelText: 'SOYAD',
                         border: OutlineInputBorder(),
@@ -53,6 +55,7 @@ class AddaccountView extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.all(8.0),
                     child: TextField(
+                      controller: controller.username.value,
                       decoration: InputDecoration(
                         labelText: 'KULLANICI ADI',
                         border: OutlineInputBorder(),
@@ -62,15 +65,38 @@ class AddaccountView extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.all(8.0),
                     child: TextField(
+                      controller: controller.email.value,
                       decoration: InputDecoration(
                         labelText: 'E POSTA',
                         border: OutlineInputBorder(),
                       ),
                     ),
                   ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: controller.password.value,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: 'ŞIFRE',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: controller.rePassword.value,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: 'ŞIFRE TEKRAR',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
                   Obx(
                     () => Padding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: DropdownButton<String>(
                         value: controller.selectedGender.value == ''
                             ? null
@@ -93,6 +119,13 @@ class AddaccountView extends StatelessWidget {
                       ),
                     ),
                   ),
+                  // Armoyu.widgets.elevatedButton.costum1(
+                  //   text: 'hesap oluştur',
+                  //   onPressed: () {
+                  //     controller.addAccount();
+                  //   },
+                  //   loadingStatus: false,
+                  // ),
                 ],
               ),
             ),

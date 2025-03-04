@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gameshowcase/app/functions/functions.dart';
 import 'package:gameshowcase/app/modules/login/controlers/login_controller.dart';
 import 'package:get/get.dart';
 
@@ -26,7 +27,7 @@ class LoginView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   const Text(
-                    "giriş yap",
+                    "GİRİŞ YAP",
                     style: TextStyle(
                         fontSize: 25,
                         color: Colors.orange,
@@ -46,32 +47,52 @@ class LoginView extends StatelessWidget {
                     padding: EdgeInsets.all(8.0),
                     child: TextField(
                       controller: controller.userPasswordController.value,
+                      obscureText: true,
                       decoration: InputDecoration(
                         labelText: ' sifre',
                         border: OutlineInputBorder(),
                       ),
                     ),
                   ),
-                  ElevatedButton(
-                      onPressed: () {
-                        if (controller.userNameController.value.text ==
-                                'mahmut' &&
-                            controller.userPasswordController.value.text ==
-                                '12345') {
-                          Get.offAndToNamed('home');
-                        }
-                      },
-                      child: Text('giris yap')),
-                  ElevatedButton(
-                      onPressed: () {
-                        Get.toNamed('addAccount');
-                      },
-                      child: Text('hesap olustur'))
+                  _buildNavButton('GİRİŞ YAP', 'login'),
+                  _buildNavButton('HESAP OLUŞTUR', 'addAccount'),
+
+                  // Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: Obx(
+                  //     () => Armoyu.widgets.elevatedButton.costum1(
+                  //       text: 'giris yap',
+                  //       onPressed: () {
+                  //         controller.login();
+                  //       },
+                  //       loadingStatus: controller.loginStatus.value,
+                  //     ),
+                  //   ),
+                  // ),
+                  // Armoyu.widgets.elevatedButton.costum1(
+                  //     text: 'hesap oluştur',
+                  //     onPressed: () {
+                  //       // Get.toNamed('addAccount');
+                  //       Functions.golink('addAccount');
+                  //     },
+                  //     loadingStatus: false)
                 ],
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildNavButton(String text, String route) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ElevatedButton(
+        onPressed: () {
+          Functions.golink(route);
+        },
+        child: Text(text),
       ),
     );
   }

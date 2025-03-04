@@ -1,4 +1,3 @@
-import 'package:gameshowcase/app/modules/home/bindings/home_binding.dart';
 import 'package:gameshowcase/app/modules/home/views/home_view.dart';
 import 'package:get/get.dart';
 
@@ -9,7 +8,6 @@ class HomeModule {
     GetPage(
       name: route,
       page: () => const HomeView(),
-      binding: HomeBinding(),
     ),
   ];
 }
