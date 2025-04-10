@@ -25,10 +25,24 @@ class NewsView extends StatelessWidget {
             SingleChildScrollView(
               child: Column(children: [
                 MenuWidget.menu(),
-                const Text(
+                Container(
+                  height: 900,
+                  width: Get.width,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/haberler1arka.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                Text(
                   'HABERLER',
                   style: TextStyle(
-                      fontSize: 50, color: Color.fromARGB(255, 221, 78, 7)),
+                    fontSize: 50,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white54,
+                    fontStyle: FontStyle.italic,
+                  ),
                 ),
                 ...List.generate(
                   5,

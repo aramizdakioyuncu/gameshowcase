@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gameshowcase/app/applist.dart';
 import 'package:gameshowcase/app/functions/functions.dart';
 import 'package:gameshowcase/app/models/user.dart';
+import 'package:gameshowcase/app/services/app.dart';
 import 'package:get/get.dart';
 // ignore: deprecated_member_use, avoid_web_libraries_in_flutter
 import 'dart:html' as html;
@@ -35,7 +36,7 @@ class AppbarWidget {
           child: Image.asset(
             'images/logo.png',
             fit: BoxFit.contain,
-            height: 50,
+            height: 80,
           ),
         ),
         centerTitle: true,
@@ -89,7 +90,7 @@ class AppbarWidget {
                       ],
                     ),
                   ),
-                  onSelected: (value) {
+                  onSelected: (value) async {
                     // Seçilen değeri işleme
                     if (kDebugMode) {
                       print("Selected: $value");
@@ -120,12 +121,13 @@ class AppbarWidget {
                   },
                 ),
           InkWell(
-            onTap: () {
-              Functions.golink('gamebutton');
+            onTap: () async {
+             
+              // Functions.golink('gamebutton');
             },
             child: Container(
               width: 150,
-              color: Colors.amber,
+              color: const Color.fromARGB(255, 27, 24, 234),
               child: const Padding(
                 padding: EdgeInsets.all(10.0),
                 child: Center(

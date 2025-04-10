@@ -57,16 +57,15 @@ class HomeView extends StatelessWidget {
                                       ),
                                     ),
                                     IconButton(
-                                        onPressed: () {
-                                          Functions.golink('gamebutton');
-                                        },
-                                        icon: Icon(Icons.next_plan_rounded))
+                                      onPressed: () {
+                                        Functions.golink('gamebutton');
+                                      },
+                                      icon: Icon(Icons.next_plan_rounded),
+                                    ),
                                   ],
                                 ),
                               ),
-                              const SizedBox(
-                                height: 100,
-                              ),
+                              const SizedBox(height: 100),
                               const Padding(
                                 padding: EdgeInsets.all(18.0),
                                 child: Text(
@@ -76,81 +75,109 @@ class HomeView extends StatelessWidget {
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
                         Expanded(
                           flex: 1,
                           child: YoutubePlayerWidget(
-                              videoUrl:
-                                  'https://youtu.be/6QmWf4doGxA?si=F6oSh48pBjH4Rfw4'),
+                            videoUrl:
+                                'https://youtu.be/OVmhjDnpM-w?si=dwbQHVcuR8QiLuNJ',
+                          ),
                         ),
                       ],
                     ),
                   ),
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.all(100.0),
-                        child: Container(
-                          height: 300,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage(
-                                  'assets/images/siyah_arka_plan.jpg'),
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Text('data'),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Text('data'),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                Padding(
+                  padding: const EdgeInsets.all(50.0),
+                  child: Text(
+                    'HARİTALAR',
+                    style: TextStyle(
+                      fontSize: 50,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white54,
+                      fontStyle: FontStyle.italic,
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.all(100.0),
-                        child: Container(
-                          height: 300,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage(
-                                  'assets/images/siyah_arka_plan.jpg'),
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Text('data'),
-                              ),
-                              Expanded(flex: 1, child: Text('data')),
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
+                  ),
                 ),
+                ScaleButton(),
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ScaleButton extends StatefulWidget {
+  @override
+  _ScaleButtonState createState() => _ScaleButtonState();
+}
+
+class _ScaleButtonState extends State<ScaleButton> {
+  double _scale = 1.0;
+
+  void _onTapDown(TapDownDetails details) {
+    setState(() {
+      _scale = 0.9; // Buton küçülüyor
+    });
+  }
+
+  void _onTapUp(TapUpDetails details) {
+    setState(() {
+      _scale = 1.0; // Buton eski haline dönüyor
+    });
+    Functions.golink('maps');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: _onTapDown,
+      onTapUp: _onTapUp,
+      child: Padding(
+        padding: const EdgeInsets.all(100.0),
+        child: Transform.scale(
+          scale: _scale,
+          child: Container(
+            height: 500,
+            width: 500,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage('assets/images/siyah_arka_plan.jpg'),
+              ),
+            ),
+            child: Column(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    'HARİTALARIMİZ',
+                    style: TextStyle(fontSize: 24, color: Colors.white),
+                  ),
+                ),
+                Expanded(
+                  flex: 4,
+                  child: Container(
+                    width: double.infinity,
+                    height: 400,
+                    decoration: BoxDecoration(
+                      color: Colors.amber,
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: AssetImage('assets/images/haritalar.png'),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

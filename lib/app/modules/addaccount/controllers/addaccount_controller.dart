@@ -10,7 +10,7 @@ class AddaccountController extends GetxController {
   var rePassword = TextEditingController().obs;
   var email = TextEditingController().obs;
 
-  var genders = <String>['Erkek', 'Kadın', 'belirtmek istemiyorum'].obs;
+  var genders = <String>['Erkek', 'Kadın', 'Belirtmek istemiyorum'].obs;
   var addAccStatus = false.obs;
 
   Future<void> addAccount() async {

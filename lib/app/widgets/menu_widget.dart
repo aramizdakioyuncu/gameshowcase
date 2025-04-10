@@ -12,6 +12,7 @@ class MenuWidget {
           _buildNavButton('HABERLER', 'news'),
           _buildNavButton('ETKİNLİKLER', 'events'),
           _buildNavButton('DESTEK', 'help'),
+          _buildNavButton('ADMIN PANEL', 'dashboard'),
         ],
       ),
     );
