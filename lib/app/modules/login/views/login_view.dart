@@ -16,12 +16,15 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(LoginController());
+
+    // Button widget to handle navigation
     Widget _buildNavButton(String text, String route) {
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: ElevatedButton(
           onPressed: () async {
             if (route == 'login') {
+              // Login işlemleri
               var response = await App.apiService.login(
                 controller.userNameController.value.text,
                 controller.userPasswordController.value.text,
@@ -29,57 +32,49 @@ class LoginView extends StatelessWidget {
 
               if (response != null && response.statusCode == 200) {
                 var responseData = jsonDecode(response.body);
-
                 String accessToken = responseData["accessToken"];
 
                 Map<String, dynamic> decodedToken = Jwt.parseJwt(accessToken);
-
-                if (decodedToken.containsKey(
-                    "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")) {
-                  String userRole = decodedToken[
-                      "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-                  print("Kullanıcı Rolü: $userRole");
-                } else {
-                  print("Rol bulunamadı!");
-                }
                 String? username;
+                String? userId;
+
                 if (decodedToken.containsKey(
                     "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")) {
-                  String username = decodedToken[
+                  username = decodedToken[
                       "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
                   print("Kullanıcı name: $username");
-                } else {
-                  print("Rol bulunamadı!");
                 }
 
-                String? userId;
                 if (decodedToken.containsKey(
                     "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")) {
                   userId = decodedToken[
                       "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
-                  print("Kullanıcı name: $userId");
-                } else {
-                  print("Rol bulunamadı!");
+                  print("Kullanıcı id: $userId");
                 }
 
-                log('giris basarili');
+                log('Giriş başarılı');
 
-                var response2 = await App.apiService.UserInfo();
-                var responseData2 = jsonDecode(response2!.body);
+                // Kullanıcı bilgilerini al
+                var response2 = await App.apiService.userInfo();
+                if (response2 != null && response2.statusCode == 200) {
+                  var responseData2 = jsonDecode(response2.body);
 
-                Applist.currentuser = User(
-                  id: int.parse(userId!),
-                  name: responseData2['username'],
-                  avatar:
-                      'http://185.93.68.107/api/Documents/cd071d3d-b85e-4a4e-bf89-f411297b89d5/${responseData2['avatarId'].toString()}',
-                  username: responseData2['username'],
-                );
+                  Applist.currentuser = User(
+                    id: int.parse(userId!),
+                    name: responseData2['username'],
+                    avatar:
+                        'http://185.93.68.107/api/Documents/cd071d3d-b85e-4a4e-bf89-f411297b89d5/${responseData2['avatarId'].toString()}',
+                    username: responseData2['username'],
+                  );
 
-                Applist.storage.write('user', Applist.currentuser!.toJson());
-                Functions.golink('/');
+                  Applist.storage.write('user', Applist.currentuser!.toJson());
+                  Functions.golink('/');
+                }
               }
-
               return;
+            } else if (route == 'addAccount') {
+              // Hesap oluşturma butonuna tıklanınca yönlendirme işlemi
+              Get.toNamed('/addAccount'); // 'addAccount' sayfasına yönlendir
             }
           },
           child: Text(text),
@@ -111,48 +106,28 @@ class LoginView extends StatelessWidget {
                         fontWeight: FontWeight.bold),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: TextField(
                       controller: controller.userNameController.value,
-                      decoration: InputDecoration(
-                        labelText: 'kullanici adi',
+                      decoration: const InputDecoration(
+                        labelText: 'Kullanıcı Adı',
                         border: OutlineInputBorder(),
                       ),
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: TextField(
                       controller: controller.userPasswordController.value,
                       obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: ' sifre',
+                      decoration: const InputDecoration(
+                        labelText: 'Şifre',
                         border: OutlineInputBorder(),
                       ),
                     ),
                   ),
                   _buildNavButton('GİRİŞ YAP', 'login'),
                   _buildNavButton('HESAP OLUŞTUR', 'addAccount'),
-
-                  // Padding(
-                  //   padding: const EdgeInsets.all(8.0),
-                  //   child: Obx(
-                  //     () => Armoyu.widgets.elevatedButton.costum1(
-                  //       text: 'giris yap',
-                  //       onPressed: () {
-                  //         controller.login();
-                  //       },
-                  //       loadingStatus: controller.loginStatus.value,
-                  //     ),
-                  //   ),
-                  // ),
-                  // Armoyu.widgets.elevatedButton.costum1(
-                  //     text: 'hesap oluştur',
-                  //     onPressed: () {
-                  //       // Get.toNamed('addAccount');
-                  //       Functions.golink('addAccount');
-                  //     },
-                  //     loadingStatus: false)
                 ],
               ),
             ),

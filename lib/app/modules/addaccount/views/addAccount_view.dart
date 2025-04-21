@@ -1,6 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:gameshowcase/app/modules/addAccount/controllers/addAccount_controller.dart';
+import 'package:gameshowcase/app/services/app.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart'; // image_picker ekleyin
+import 'package:gameshowcase/app/modules/addAccount/controllers/addAccount_controller.dart';
+import 'package:gameshowcase/app/services/apiservices.dart'; // API servisini ekleyin
 
 class AddaccountView extends StatelessWidget {
   const AddaccountView({super.key});
@@ -8,6 +12,64 @@ class AddaccountView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(AddaccountController());
+    File? avatarFile; // Avatar dosyası
+
+    // Avatar seçme fonksiyonu
+    Future<void> _pickAvatar() async {
+      final picker = ImagePicker();
+      final pickedFile = await picker.pickImage(
+        source: ImageSource.gallery,
+      ); // Galeriye yönlendirme
+
+      if (pickedFile != null) {
+        avatarFile = File(pickedFile.path); // Avatar dosyasını seçtikten sonra
+        Get.snackbar('Avatar Seçildi', 'Avatar başarıyla seçildi!');
+      } else {
+        Get.snackbar('Hata', 'Avatar seçimi yapılmadı!');
+      }
+    }
+
+    Future<void> registerAccount2() async {
+      var response = await App.apiService.register2(
+        username: controller.username.value.text,
+        mail: controller.email.value.text,
+        avatar: avatarFile,
+        password: controller.password.value.text,
+        birthDate: "1990-01-01",
+      );
+
+      if (response != null && response.statusCode == 200) {
+        Get.snackbar('Başarılı', 'Hesap oluşturuldu!');
+      } else {
+        Get.snackbar('Hata', 'Hesap oluşturulurken bir sorun oluştu.');
+      }
+    }
+
+    // Kayıt işlemi
+    Future<void> registerAccount() async {
+      if (avatarFile == null) {
+        Get.snackbar('Hata', 'Avatar seçilmedi!');
+        return;
+      }
+
+      // API'ye doğru parametrelerle istek gönder
+      final response = await App.apiService.register(
+        username: controller.username.value.text,
+        mail: controller.email.value.text,
+        password: controller.password.value.text,
+        avatar: avatarFile!, // Avatar dosyasını geçiriyoruz
+        birthDate:
+            "1990-01-01", // Doğum tarihini burada manuel ya da kullanıcıdan alabilirsiniz
+        consentsJson:
+            '{"privacy": true}', // Konsens JSON (kullanıcı onayı verisi)
+      );
+
+      if (response != null && response.statusCode == 200) {
+        Get.snackbar('Başarılı', 'Hesap oluşturuldu!');
+      } else {
+        Get.snackbar('Hata', 'Hesap oluşturulurken bir sorun oluştu.');
+      }
+    }
 
     return Scaffold(
       body: Stack(
@@ -31,26 +93,6 @@ class AddaccountView extends StatelessWidget {
                         fontSize: 25,
                         color: Colors.orange,
                         fontWeight: FontWeight.bold),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: controller.name.value,
-                      decoration: InputDecoration(
-                        labelText: 'AD',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: controller.lastname.value,
-                      decoration: InputDecoration(
-                        labelText: 'SOYAD',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
                   ),
                   Padding(
                     padding: EdgeInsets.all(8.0),
@@ -94,38 +136,23 @@ class AddaccountView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Obx(
-                    () => Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: DropdownButton<String>(
-                        value: controller.selectedGender.value == ''
-                            ? null
-                            : controller.selectedGender.value,
-                        hint: const Text("Cinsiyet Seçiniz"),
-                        items: List.generate(
-                          controller.genders.length,
-                          (index) {
-                            return DropdownMenuItem(
-                              value: controller.genders[index],
-                              child: Text(controller.genders[index]),
-                            );
-                          },
-                        ),
-                        onChanged: (String? newValue) {
-                          if (newValue != null) {
-                            controller.selectedGender.value = newValue;
-                          }
-                        },
-                      ),
+                  // Avatar seçme butonu
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      onPressed: _pickAvatar,
+                      child: Text("Avatar Seç"),
                     ),
                   ),
-                  // Armoyu.widgets.elevatedButton.costum1(
-                  //   text: 'hesap oluştur',
-                  //   onPressed: () {
-                  //     controller.addAccount();
-                  //   },
-                  //   loadingStatus: false,
-                  // ),
+                  // Hesap oluştur butonu
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      // onPressed: registerAccount,
+                      onPressed: registerAccount2,
+                      child: Text("Hesap Oluştur"),
+                    ),
+                  ),
                 ],
               ),
             ),
