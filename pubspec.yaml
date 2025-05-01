@@ -17,6 +17,7 @@ dependencies:
 
   cupertino_icons: ^1.0.8
   get: ^4.6.6
+  dio: ^5.8.0+1
   get_storage: ^2.1.1
   cached_network_image: ^3.4.1
   armoyu_services: ^1.0.0+22

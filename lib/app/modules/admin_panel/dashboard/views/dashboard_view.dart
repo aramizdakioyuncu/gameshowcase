@@ -1,9 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:gameshowcase/app/modules/admin_panel/admin_events/views/events_view.dart';
+import 'package:gameshowcase/app/modules/admin_panel/admin_news/views/news_view.dart';
 import 'package:gameshowcase/app/modules/admin_panel/admin_update_notes/views/updates_view.dart';
 import 'package:get/get.dart';
-import '../../admin_news/views/news_view.dart';
 
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
@@ -15,7 +14,7 @@ class DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<DashboardView> {
   Widget _selectedView = const Center(
     child: Text(
-      'ADMİN PANELE HOŞ GELDİNİZ',
+      'ADMİN PANELE HOŞ GELDİNİZ>>',
       style: TextStyle(fontSize: 30, fontStyle: FontStyle.italic),
     ),
   );
@@ -34,45 +33,81 @@ class _DashboardViewState extends State<DashboardView> {
           Container(
             width: 300,
             height: Get.height,
-            color: Colors.cyan,
+            color: Colors.white,
             child: Column(
               children: [
                 const Padding(
                   padding: EdgeInsets.all(20.0),
                   child: Text(
                     'ADMİN PANEL',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 ListTile(
-                  leading: const Icon(Icons.home),
-                  title: const Text("Dashboard"),
-                  onTap:
-                      () => _changeView(
-                        const Center(
-                          child: Text(
-                            'ADMİN PANELE HOŞ GELDİNİZ',
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
+                  leading: const Icon(
+                    Icons.home,
+                    color: Colors.black,
+                  ),
+                  title: const Text(
+                    "Dashboard",
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                  onTap: () => _changeView(
+                    const Center(
+                      child: Text(
+                        'ADMİN PANELE HOŞ GELDİNİZ<<',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 30,
+                          fontStyle: FontStyle.italic,
                         ),
                       ),
+                    ),
+                  ),
                 ),
                 ListTile(
-                  leading: const Icon(Icons.newspaper),
-                  title: const Text('Haberler'),
+                  leading: const Icon(
+                    Icons.newspaper,
+                    color: Colors.black,
+                  ),
+                  title: const Text(
+                    'Haberler',
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
                   onTap: () => _changeView(const AdminNewsView()),
                 ),
                 ListTile(
-                  leading: const Icon(Icons.event),
-                  title: const Text('Etkinlikler'),
+                  leading: const Icon(
+                    Icons.event,
+                    color: Colors.black,
+                  ),
+                  title: const Text(
+                    'Etkinlikler',
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
                   onTap: () => _changeView(const AdminEventsView()),
                 ),
                 ListTile(
-                  leading: const Icon(Icons.update),
-                  title: const Text('Güncellemeler'),
+                  leading: const Icon(
+                    Icons.update,
+                    color: Colors.black,
+                  ),
+                  title: const Text(
+                    'Güncellemeler',
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
                   onTap: () => _changeView(const AdminUpdatesView()),
                 ),
               ],
@@ -80,9 +115,8 @@ class _DashboardViewState extends State<DashboardView> {
           ),
           Expanded(
             flex: 1,
-            child: Container(
+            child: SizedBox(
               height: Get.height,
-              color: Colors.amberAccent,
               child: _selectedView,
             ),
           ),

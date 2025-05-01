@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gameshowcase/app/applist.dart';
 import 'package:gameshowcase/app/functions/functions.dart';
@@ -37,12 +38,15 @@ class LoginView extends StatelessWidget {
                 Map<String, dynamic> decodedToken = Jwt.parseJwt(accessToken);
                 String? username;
                 String? userId;
+                String? role;
 
                 if (decodedToken.containsKey(
                     "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")) {
                   username = decodedToken[
                       "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
-                  print("Kullanıcı name: $username");
+                  if (kDebugMode) {
+                    print("Kullanıcı name: $username");
+                  }
                 }
 
                 if (decodedToken.containsKey(
@@ -50,6 +54,13 @@ class LoginView extends StatelessWidget {
                   userId = decodedToken[
                       "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
                   print("Kullanıcı id: $userId");
+                }
+
+                if (decodedToken.containsKey(
+                    "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")) {
+                  role = decodedToken[
+                      "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+                  print("Kullanıcı rol: $role");
                 }
 
                 log('Giriş başarılı');
@@ -61,10 +72,12 @@ class LoginView extends StatelessWidget {
 
                   Applist.currentuser = User(
                     id: int.parse(userId!),
+                    token: accessToken,
                     name: responseData2['username'],
                     avatar:
                         'http://185.93.68.107/api/Documents/cd071d3d-b85e-4a4e-bf89-f411297b89d5/${responseData2['avatarId'].toString()}',
                     username: responseData2['username'],
+                    role: role ?? 'User',
                   );
 
                   Applist.storage.write('user', Applist.currentuser!.toJson());

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gameshowcase/app/applist.dart';
 import 'package:gameshowcase/app/functions/functions.dart';
 
 class MenuWidget {
@@ -19,7 +20,7 @@ class MenuWidget {
   }
 
   static _buildNavButton(String text, String route) {
-    return Padding(
+    Widget widget = Padding(
       padding: const EdgeInsets.all(20.0),
       child: ElevatedButton(
         onPressed: () {
@@ -28,5 +29,14 @@ class MenuWidget {
         child: Text(text),
       ),
     );
+
+    if (route == "dashboard") {
+      //Kullanıcı bilgilerini kontrol et
+      if (Applist.currentuser == null || Applist.currentuser!.role != "Admin") {
+        return SizedBox.shrink();
+      }
+    }
+
+    return widget;
   }
 }

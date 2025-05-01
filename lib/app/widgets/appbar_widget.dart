@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:gameshowcase/app/applist.dart';
 import 'package:gameshowcase/app/functions/functions.dart';
 import 'package:gameshowcase/app/models/user.dart';
-import 'package:gameshowcase/app/services/app.dart';
 import 'package:get/get.dart';
 // ignore: deprecated_member_use, avoid_web_libraries_in_flutter
 import 'dart:html' as html;
@@ -122,7 +121,6 @@ class AppbarWidget {
                 ),
           InkWell(
             onTap: () async {
-             
               // Functions.golink('gamebutton');
             },
             child: Container(

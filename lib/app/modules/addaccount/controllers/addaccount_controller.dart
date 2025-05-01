@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gameshowcase/app/services/app.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddaccountController extends GetxController {
   var selectedGender = ''.obs;
@@ -23,21 +25,45 @@ class AddaccountController extends GetxController {
       return;
     }
     addAccStatus.value = true;
+  }
 
-    // RegisterResponse response = await Armoyu.service.authServices.register(
-    //   username: username.value.text,
-    //   password: password.value.text,
-    //   firstname: name.value.text,
-    //   lastname: lastname.value.text,
-    //   email: email.value.text,
-    //   rpassword: password.value.text,
-    // );
-    // addAccStatus.value = false;
+  XFile? avatarFile; // Avatar dosyası
 
-    // if (!response.result.status) {
-    //   Get.snackbar("HATA", response.result.description);
-    //   return;
-    // }
-    // Get.snackbar('hesabiniz olusturulmustur', response.result.description);
+  // Avatar seçme fonksiyonu
+  Future<void> pickAvatar() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(
+      source: ImageSource.gallery,
+    ); // Galeriye yönlendirme
+
+    if (pickedFile != null) {
+      avatarFile = XFile(pickedFile.path); // Avatar dosyasını seçtikten sonra
+      Get.snackbar('Avatar Seçildi', 'Avatar başarıyla seçildi!');
+    } else {
+      Get.snackbar('Hata', 'Avatar seçimi yapılmadı!');
+    }
+  }
+
+  // Kayıt işlemi
+  Future<void> registerAccount() async {
+    if (avatarFile == null) {
+      Get.snackbar('Hata', 'Avatar seçilmedi!');
+      return;
+    }
+
+    // API'ye doğru parametrelerle istek gönder
+    final response = await App.apiService.register(
+      username: username.value.text,
+      mail: email.value.text,
+      password: password.value.text,
+      avatar: avatarFile!, // Avatar dosyasını geçiriyoruz
+      birthDate: "1990-01-01",
+    );
+
+    if (response != null && response.statusCode == 200) {
+      Get.snackbar('Başarılı', 'Hesap oluşturuldu!');
+    } else {
+      Get.snackbar('Hata', 'Hesap oluşturulurken bir sorun oluştu.');
+    }
   }
 }

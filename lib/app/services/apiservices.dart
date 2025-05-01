@@ -1,17 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
+import 'package:flutter/foundation.dart';
+import 'package:gameshowcase/app/applist.dart';
 import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart'; // Multipart için gerekli
+import 'package:image_picker/image_picker.dart'; // Multipart için gerekli
 
 class RestApiService {
   final String baseUrl = "http://185.93.68.107/api"; // Sabit Host Adresi
-  String? _token; // Özel olarak saklanan token (Encapsulation)
-
   // Token set edici (setter)
-  void setToken(String token) {
-    _token = token;
-  }
 
   // HTTP isteği yapan fonksiyon
   Future<http.Response?> request({
@@ -20,10 +16,42 @@ class RestApiService {
     Map<String, dynamic>? data, // JSON body
     Map<String, String>? headers, // HTTP başlıkları (Opsiyonel)
     Map<String, String>? queryParams, // URL parametreleri (Opsiyonel)
-
-    bool contentTypemultiform = false,
+    Map<XFile, String>? file,
   }) async {
     try {
+      if (file != null) {
+        var headers = {'accept': 'text/plain', 'Language-Id': 'tr'};
+        var request = http.MultipartRequest(
+          'POST',
+          Uri.parse("$baseUrl$endpoint").replace(queryParameters: queryParams),
+        );
+
+        // Body'yi ekle
+        if (data != null) {
+          for (var key in data.keys) {
+            request.fields[key] = data[key].toString();
+          }
+        }
+
+        final fileBytes = await file.keys.first.readAsBytes();
+
+        request.files.add(
+          http.MultipartFile.fromBytes(
+            file.values.first,
+            fileBytes,
+            filename: "avatar.jpg",
+          ),
+        ); // Eğer token varsa, Authorization başlığına ekle
+
+        if (Applist.currentuser != null) {
+          headers["Authorization"] = "Bearer ${Applist.currentuser!.token}";
+        }
+        request.headers.addAll(headers);
+
+        http.StreamedResponse response = await request.send();
+        return await http.Response.fromStream(response);
+      }
+
       // URL oluştur
       Uri url =
           Uri.parse("$baseUrl$endpoint").replace(queryParameters: queryParams);
@@ -31,14 +59,13 @@ class RestApiService {
       // Varsayılan başlıklar
       headers ??= {};
       headers.addAll({
-        "Content-Type":
-            contentTypemultiform ? 'multipart/form-data' : "application/json",
+        "Content-Type": "application/json",
         "Language-Id": "tr", // Varsayılan dil başlığı
       });
 
       // Eğer token varsa, Authorization başlığına ekle
-      if (_token != null) {
-        headers["Authorization"] = "Bearer $_token";
+      if (Applist.currentuser != null) {
+        headers["Authorization"] = "Bearer ${Applist.currentuser!.token}";
       }
 
       http.Response response;
@@ -68,6 +95,74 @@ class RestApiService {
     }
   }
 
+  Future<http.Response?> newsList({required int page}) async {
+    var response = await request(
+      method: "GET",
+      endpoint: "/Contents/SearchForPanel",
+      queryParams: {
+        "Type": "news",
+        "orderbycolumnname": "CreatedDate",
+        "ordertype": "desc",
+        "PageNumber": "$page",
+        "pagesize": "10",
+      },
+    );
+
+    if (response != null && response.statusCode == 200) {
+      return response;
+    }
+    if (kDebugMode) {
+      print("Giriş başarısız!");
+    }
+    return response;
+  }
+
+  Future<http.Response?> newsAdd({
+    required String name,
+    required String title,
+    required String text,
+    required XFile banner,
+  }) async {
+    var response = await request(
+      method: "POST",
+      endpoint: "/Contents",
+      file: {banner: "Banner"},
+      data: {
+        "Name": name,
+        "TitleJson": '{"tr": "$title", "en": "$title"}',
+        "TextJson": '{"tr": "$text", "en": "$text"}',
+        "Type": "news",
+      },
+    );
+
+    if (response != null && response.statusCode == 201) {
+      return response;
+    }
+    if (kDebugMode) {
+      print("haber eklenemedi!");
+      print(response);
+    }
+    return response;
+  }
+
+  Future<http.Response?> newsRemove({
+    required int id,
+  }) async {
+    var response = await request(
+      method: "DELETE",
+      endpoint: "/Contents/$id",
+    );
+
+    if (response != null && response.statusCode == 204) {
+      return response;
+    }
+    if (kDebugMode) {
+      print("haber silinemedi!");
+      print(response);
+    }
+    return response;
+  }
+
   // Kullanıcı giriş fonksiyonu (Login)
   Future<http.Response?> login(String username, String password) async {
     var response = await request(
@@ -79,20 +174,23 @@ class RestApiService {
     if (response != null && response.statusCode == 200) {
       var responseData = jsonDecode(response.body);
 
-      setToken(responseData["accessToken"]); // Token'ı sakla
-      print("Giriş başarılı, token kaydedildi!");
+      if (kDebugMode) {
+        print("Giriş başarılı, token kaydedildi!");
+      }
       return response;
     }
-    print("Giriş başarısız!");
+    if (kDebugMode) {
+      print("Giriş başarısız!");
+    }
     return response;
   }
 
   // Kullanıcı giriş fonksiyonu (Login)
-  Future<http.Response?> register2({
+  Future<http.Response?> register({
     required String username,
     required String mail,
     required String password,
-    required File? avatar, // Avatar olarak bir dosya
+    required XFile? avatar, // Avatar olarak bir dosya
     required String birthDate, // ISO 8601 format
   }) async {
     if (avatar == null) {
@@ -103,60 +201,21 @@ class RestApiService {
     var response = await request(
       method: "POST",
       endpoint: "/users/Register",
+      file: {avatar: "Avatar"},
       data: {
         "username": username,
         "Mail": mail,
         "Password": password,
-        "Avatar": avatar.path,
         "BirthDate": birthDate,
-        "ConsentsJson": jsonEncode({"privacy": true})
       },
-      contentTypemultiform: true,
     );
 
     if (response != null && response.statusCode == 200) {
       print(response.body.toString());
       return response;
     }
-    print("Giriş başarısız!");
+    log(response?.body.toString() ?? "null");
     return response;
-  }
-
-  // Kullanıcı kayıt fonksiyonu (Register) dosya yükleme ile
-  Future<http.Response?> register({
-    required String username,
-    required String mail,
-    required String password,
-    required File avatar, // Avatar olarak bir dosya
-    required String birthDate, // ISO 8601 format
-    required String consentsJson, // JSON string
-  }) async {
-    var uri = Uri.parse("$baseUrl/users/register"); // Register endpointi
-
-    var request = http.MultipartRequest("POST", uri)
-      ..fields['username'] = username
-      ..fields['mail'] = mail
-      ..fields['password'] = password
-      ..fields['birthDate'] = birthDate
-      ..fields['consentsJson'] = consentsJson;
-
-    // Avatar dosyasını multipart olarak ekle
-    var avatarFile = await http.MultipartFile.fromPath(
-      'avatar', // Parametre adı (API'ye göre değişebilir)
-      avatar.path,
-      contentType: MediaType('image', 'jpeg'), // İçerik tipi (jpeg veya png)
-    );
-
-    request.files.add(avatarFile);
-
-    var response = await request.send(); // İstek gönder
-
-    // Yanıtı al
-    var responseData = await http.Response.fromStream(response);
-    print("Durum Kodu: ${responseData.statusCode}");
-    print("Yanıt: ${responseData.body}");
-
-    return responseData;
   }
 
   // Kullanıcı bilgilerini getirme fonksiyonu
