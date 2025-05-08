@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gameshowcase/app/modules/news/controllers/news_controller.dart';
 import 'package:gameshowcase/app/widgets/appbar_widget.dart';
@@ -10,20 +11,21 @@ class NewsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(NewsController());
+    final controller = Get.put(NewsController());
 
     return Scaffold(
-        appBar: AppbarWidget.appbar1(),
-        body: Stack(
-          children: [
-            Image.asset(
-              'wallpapers/login.jpg',
-              fit: BoxFit.cover,
-              height: Get.height,
-              width: Get.width,
-            ),
-            SingleChildScrollView(
-              child: Column(children: [
+      appBar: AppbarWidget.appbar1(),
+      body: Stack(
+        children: [
+          Image.asset(
+            'wallpapers/login.jpg',
+            fit: BoxFit.cover,
+            height: Get.height,
+            width: Get.width,
+          ),
+          SingleChildScrollView(
+            child: Column(
+              children: [
                 MenuWidget.menu(),
                 Container(
                   height: 900,
@@ -44,48 +46,67 @@ class NewsView extends StatelessWidget {
                     fontStyle: FontStyle.italic,
                   ),
                 ),
-                ...List.generate(
-                  5,
-                  (index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Container(
-                        color: Colors.black,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CachedNetworkImage(
-                              imageUrl:
-                                  'https://wstatic-prod-boc.krafton.com/common/content/news/20241228/05ClqwbA_thumb.jpg',
-                              height: 280,
-                              width: 500,
-                              fit: BoxFit.cover,
-                            ),
-                            const Expanded(
-                                child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'BAHAR 2024, YENİ YIL HEDİYESİYLE GERİ DÖNÜYOR!',
-                                    style: TextStyle(fontSize: 30),
+                Obx(
+                  () => controller.newsList.value == null
+                      ? Center(
+                          child: CupertinoActivityIndicator(),
+                        )
+                      : Column(
+                          children: List.generate(
+                            controller.newsList.value!.length,
+                            (index) {
+                              FetchNews newsItem =
+                                  controller.newsList.value![index];
+
+                              return Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: InkWell(
+                                  onTap: () =>
+                                      Get.toNamed('/NewsDetail/${newsItem.id}'),
+                                  child: Container(
+                                    color: Colors.black,
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        CachedNetworkImage(
+                                          imageUrl:
+                                              'http://185.93.68.107/api/Documents/cd071d3d-b85e-4a4e-bf89-f411297b89d5/${newsItem.bannerId}',
+                                          height: 280,
+                                          width: 500,
+                                          fit: BoxFit.cover,
+                                        ),
+                                        Expanded(
+                                            child: Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                newsItem.title,
+                                                style: TextStyle(fontSize: 30),
+                                              ),
+                                              Text(newsItem.createdDate,
+                                                  style:
+                                                      TextStyle(fontSize: 10))
+                                            ],
+                                          ),
+                                        ))
+                                      ],
+                                    ),
                                   ),
-                                  Text(
-                                      'BAHAR 2024, YENİ YIL HEDİYESİYLE GERİ DÖNÜYOR!',
-                                      style: TextStyle(fontSize: 10))
-                                ],
-                              ),
-                            ))
-                          ],
+                                ),
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                )
-              ]),
+                ),
+              ],
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }

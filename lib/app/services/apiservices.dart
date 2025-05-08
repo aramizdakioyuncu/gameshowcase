@@ -103,7 +103,45 @@ class RestApiService {
     }
   }
 
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  Future<http.Response?> newsDetail({required int id}) async {
+    var response = await request(
+      method: "GET",
+      endpoint: "/Contents/$id",
+      queryParams: {},
+    );
+
+    if (response != null && response.statusCode == 200) {
+      return response;
+    }
+
+    return response;
+  }
+
+///////////////////////////////////////////////////////////////////////////////////////////
   Future<http.Response?> newsList({required int page}) async {
+    var response = await request(
+      method: "GET",
+      endpoint: "/Contents/Search",
+      queryParams: {
+        "Type": "news",
+        "orderbycolumnname": "CreatedDate",
+        "ordertype": "desc",
+        "PageNumber": "$page",
+        "pagesize": "10",
+      },
+    );
+
+    if (response != null && response.statusCode == 200) {
+      return response;
+    }
+
+    return response;
+  }
+
+  // /////////////////////////////////////////////////////////////////////////////////////////
+
+  Future<http.Response?> newsListToPanel({required int page}) async {
     var response = await request(
       method: "GET",
       endpoint: "/Contents/SearchForPanel",
@@ -125,6 +163,7 @@ class RestApiService {
     return response;
   }
 
+///////////////////////////////////////////////////////////////////////////////////////////
   Future<http.Response?> newsAdd({
     required String name,
     required String title,
@@ -180,8 +219,6 @@ class RestApiService {
     );
 
     if (response != null && response.statusCode == 200) {
-      var responseData = jsonDecode(response.body);
-
       if (kDebugMode) {
         print("Giriş başarılı, token kaydedildi!");
       }

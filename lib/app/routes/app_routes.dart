@@ -11,6 +11,7 @@ import 'package:gameshowcase/app/modules/login/login_module.dart';
 import 'package:gameshowcase/app/modules/maps/maps_module.dart';
 import 'package:gameshowcase/app/modules/media/media_module.dart';
 import 'package:gameshowcase/app/modules/news/news_module.dart';
+import 'package:gameshowcase/app/modules/news_detail/news_detail_module.dart';
 
 class AppPages {
   static var initial = HomeModule.route;
@@ -28,5 +29,6 @@ class AppPages {
     ...AdminNewsModule.routes,
     ...AdminUpdatesModule.routes,
     ...DashboardModule.routes,
+    ...NewsDetailModule.routes,
   ];
 }

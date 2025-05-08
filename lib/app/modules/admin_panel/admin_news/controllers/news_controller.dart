@@ -114,7 +114,7 @@ class AdminNewsController extends GetxController {
 
   fetchnewsList() async {
     http.Response? response =
-        await App.apiService.newsList(page: pagecount.value);
+        await App.apiService.newsListToPanel(page: pagecount.value);
 
     if (response != null && response.statusCode == 200) {
       var responseData = jsonDecode(response.body);
