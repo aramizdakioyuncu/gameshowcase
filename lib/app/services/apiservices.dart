@@ -17,6 +17,7 @@ class RestApiService {
     Map<String, String>? headers, // HTTP başlıkları (Opsiyonel)
     Map<String, String>? queryParams, // URL parametreleri (Opsiyonel)
     Map<XFile, String>? file,
+    String? accessToken,
   }) async {
     try {
       if (file != null) {
@@ -43,9 +44,13 @@ class RestApiService {
           ),
         ); // Eğer token varsa, Authorization başlığına ekle
 
+        if (accessToken != null) {
+          headers["Authorization"] = "Bearer $accessToken";
+        }
         if (Applist.currentuser != null) {
           headers["Authorization"] = "Bearer ${Applist.currentuser!.token}";
         }
+
         request.headers.addAll(headers);
 
         http.StreamedResponse response = await request.send();
@@ -63,6 +68,9 @@ class RestApiService {
         "Language-Id": "tr", // Varsayılan dil başlığı
       });
 
+      if (accessToken != null) {
+        headers["Authorization"] = "Bearer $accessToken";
+      }
       // Eğer token varsa, Authorization başlığına ekle
       if (Applist.currentuser != null) {
         headers["Authorization"] = "Bearer ${Applist.currentuser!.token}";
@@ -219,10 +227,11 @@ class RestApiService {
   }
 
   // Kullanıcı bilgilerini getirme fonksiyonu
-  Future<http.Response?> userInfo() async {
+  Future<http.Response?> userInfo(String accesstoken) async {
     var response = await request(
       method: "GET",
       endpoint: "/users",
+      accessToken: accesstoken,
     );
 
     return response;

@@ -66,8 +66,10 @@ class LoginView extends StatelessWidget {
                 log('Giriş başarılı');
 
                 // Kullanıcı bilgilerini al
-                var response2 = await App.apiService.userInfo();
+                var response2 = await App.apiService.userInfo(accessToken);
+
                 if (response2 != null && response2.statusCode == 200) {
+                  log("rtyhj");
                   var responseData2 = jsonDecode(response2.body);
 
                   Applist.currentuser = User(
