@@ -209,6 +209,120 @@ class RestApiService {
     }
     return response;
   }
+  /////event baslangic
+
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  //haber detaylari
+  Future<http.Response?> eventsDetail({required int id}) async {
+    var response = await request(
+      method: "GET",
+      endpoint: "/Contents/$id",
+      queryParams: {},
+    );
+
+    if (response != null && response.statusCode == 200) {
+      return response;
+    }
+
+    return response;
+  }
+
+///////////////////////////////////////////////////////////////////////////////////////////
+  ///haber listeleme
+  Future<http.Response?> eventList({required int page}) async {
+    var response = await request(
+      method: "GET",
+      endpoint: "/Contents/Search",
+      queryParams: {
+        "Type": "event",
+        "orderbycolumnname": "CreatedDate",
+        "ordertype": "desc",
+        "PageNumber": "$page",
+        "pagesize": "10",
+      },
+    );
+
+    if (response != null && response.statusCode == 200) {
+      log("Response Body: ${response.body}");
+      return response;
+    }
+
+    return response;
+  }
+
+  // /////////////////////////////////////////////////////////////////////////////////////////
+
+  Future<http.Response?> eventsListToPanel({required int page}) async {
+    var response = await request(
+      method: "GET",
+      endpoint: "/Contents/SearchForPanel",
+      queryParams: {
+        "Type": "Event",
+        "orderbycolumnname": "CreatedDate",
+        "ordertype": "desc",
+        "PageNumber": "$page",
+        "pagesize": "10",
+      },
+    );
+
+    if (response != null && response.statusCode == 200) {
+      return response;
+    }
+    if (kDebugMode) {
+      print("Giriş başarısız!");
+    }
+    return response;
+  }
+
+///////////////////////////////////////////////////////////////////////////////////////////
+  Future<http.Response?> eventsAdd(
+      {required String name,
+      required String title,
+      required String text,
+      required XFile banner,
+      required String youtubeUrl}) async {
+    var response = await request(
+      method: "POST",
+      endpoint: "/Contents",
+      file: {banner: "Banner"},
+      data: {
+        "Name": name,
+        "TitleJson": '{"tr": "$title", "en": "$title"}',
+        "TextJson": '{"tr": "$text", "en": "$text"}',
+        "Type": "Event",
+        "YoutubeUrl": youtubeUrl
+      },
+    );
+
+    if (response != null && response.statusCode == 201) {
+      return response;
+    }
+    if (kDebugMode) {
+      print("etkinlik eklenemedi!");
+      print(response);
+    }
+    return response;
+  }
+
+  Future<http.Response?> eventsRemove({
+    required int id,
+  }) async {
+    var response = await request(
+      method: "DELETE",
+      endpoint: "/Contents/$id",
+    );
+
+    if (response != null && response.statusCode == 204) {
+      return response;
+    }
+    if (kDebugMode) {
+      print("haber silinemedi!");
+      print(response);
+    }
+    return response;
+  }
+
+  //////event sonu
 
   // Kullanıcı giriş fonksiyonu (Login)
   Future<http.Response?> login(String username, String password) async {

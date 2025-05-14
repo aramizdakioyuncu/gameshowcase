@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gameshowcase/app/modules/events/controllers/event_controller.dart';
 import 'package:gameshowcase/app/widgets/appbar_widget.dart';
@@ -9,7 +11,7 @@ class EventView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(EventController());
+    final controller = Get.put(EventsController());
 
     return Scaffold(
       appBar: AppbarWidget.appbar1(),
@@ -50,62 +52,61 @@ class EventView extends StatelessWidget {
                     ),
                   ],
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.all(100.0),
-                        child: Container(
-                          height: 300,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage(
-                                  'assets/images/siyah_arka_plan.jpg'),
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Text('data'),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Text('data'),
-                              ),
-                            ],
+                Obx(
+                  () => controller.eventsList.value == null
+                      ? Center(
+                          child: CupertinoActivityIndicator(),
+                        )
+                      : Column(
+                          children: List.generate(
+                            controller.eventsList.value!.length,
+                            (index) {
+                              FetchEvents eventsItem =
+                                  controller.eventsList.value![index];
+
+                              return Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: InkWell(
+                                  onTap: () => Get.toNamed(
+                                      '/EventsDetail/${eventsItem.id}'),
+                                  child: Container(
+                                    color: Colors.black,
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        CachedNetworkImage(
+                                          imageUrl:
+                                              'http://185.93.68.107/api/Documents/cd071d3d-b85e-4a4e-bf89-f411297b89d5/${eventsItem.bannerId}',
+                                          height: 280,
+                                          width: 500,
+                                          fit: BoxFit.cover,
+                                        ),
+                                        Expanded(
+                                            child: Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                eventsItem.title,
+                                                style: TextStyle(fontSize: 30),
+                                              ),
+                                              Text(eventsItem.createdDate,
+                                                  style:
+                                                      TextStyle(fontSize: 10))
+                                            ],
+                                          ),
+                                        ))
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.all(100.0),
-                        child: Container(
-                          height: 300,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage(
-                                  'assets/images/siyah_arka_plan.jpg'),
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Text('data'),
-                              ),
-                              Expanded(flex: 1, child: Text('data')),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
                 ),
               ],
             ),
