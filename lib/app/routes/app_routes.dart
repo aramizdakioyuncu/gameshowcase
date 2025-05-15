@@ -6,13 +6,13 @@ import 'package:gameshowcase/app/modules/admin_panel/dashboard/dashboard_module.
 import 'package:gameshowcase/app/modules/events/event_module.dart';
 import 'package:gameshowcase/app/modules/events_detail/events_detail_module.dart';
 import 'package:gameshowcase/app/modules/game_button/game_button_module.dart';
-import 'package:gameshowcase/app/modules/help/help_module.dart';
 import 'package:gameshowcase/app/modules/home/home_module.dart';
 import 'package:gameshowcase/app/modules/login/login_module.dart';
 import 'package:gameshowcase/app/modules/maps/maps_module.dart';
 import 'package:gameshowcase/app/modules/media/media_module.dart';
 import 'package:gameshowcase/app/modules/news/news_module.dart';
 import 'package:gameshowcase/app/modules/news_detail/news_detail_module.dart';
+import 'package:gameshowcase/app/modules/update_notes/update_notes_module.dart';
 
 class AppPages {
   static var initial = HomeModule.route;
@@ -24,13 +24,13 @@ class AppPages {
     ...NewsModule.routes,
     ...MediaModule.routes,
     ...EventModule.routes,
-    ...HelpModule.routes,
     ...MapsModule.routes,
     ...AdminEventModule.routes,
     ...AdminNewsModule.routes,
-    ...AdminUpdatesModule.routes,
+    ...AdminUpdateModule.routes,
     ...DashboardModule.routes,
     ...NewsDetailModule.routes,
     ...EventsDetailModule.routes,
+    ...UpdateModule.routes,
   ];
 }

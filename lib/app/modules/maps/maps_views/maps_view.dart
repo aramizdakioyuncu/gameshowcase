@@ -16,17 +16,22 @@ class MapsView extends StatelessWidget {
       body: Stack(
         children: [
           Image.asset(
-            'wallpapers/login.jpg',
+            'wallpapers/login.gif',
             fit: BoxFit.cover,
             height: Get.height,
             width: Get.width,
+          ),
+          Container(
+            height: Get.height,
+            width: Get.width,
+            color: Colors.black.withOpacity(0.75), // karanlık efekti
           ),
           SingleChildScrollView(
             child: Column(
               children: [
                 MenuWidget.menu(),
                 ...List.generate(
-                  4,
+                  1,
                   (index) {
                     return Padding(
                       padding: const EdgeInsets.all(12.0),

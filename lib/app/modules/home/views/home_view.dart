@@ -18,87 +18,61 @@ class HomeView extends StatelessWidget {
       body: Stack(
         children: [
           Image.asset(
-            'wallpapers/login.jpg',
+            'wallpapers/login.gif',
             fit: BoxFit.cover,
             height: Get.height,
             width: Get.width,
+          ),
+          Container(
+            height: Get.height,
+            width: Get.width,
+            color: Colors.black.withOpacity(0.75), // karanlık efekti
           ),
           SingleChildScrollView(
             child: Column(
               children: <Widget>[
                 MenuWidget.menu(),
-                Padding(
-                  padding: const EdgeInsets.all(100.0),
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage('assets/images/siyah_arka_plan.jpg'),
-                      ),
-                    ),
-                    height: 322,
-                    width: Get.width,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(18.0),
-                                child: Row(
-                                  children: [
-                                    const Text(
-                                      'GÜNCELLEME NOTLARI',
-                                      style: TextStyle(
-                                        fontSize: 40,
-                                        fontWeight: FontWeight.w900,
-                                      ),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {
-                                        Functions.golink('gamebutton');
-                                      },
-                                      icon: Icon(Icons.next_plan_rounded),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 100),
-                              const Padding(
-                                padding: EdgeInsets.all(18.0),
-                                child: Text(
-                                  'güncelleme notları 34.1',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: YoutubePlayerWidget(
-                            videoUrl:
-                                'https://youtu.be/OVmhjDnpM-w?si=dwbQHVcuR8QiLuNJ',
-                          ),
-                        ),
-                      ],
-                    ),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 80),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(50.0),
-                  child: Text(
-                    'HARİTALAR',
-                    style: TextStyle(
-                      fontSize: 50,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white54,
-                      fontStyle: FontStyle.italic,
+
+                // Altındaki açıklama yazısı
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: SingleChildScrollView(
+                      child: Text(
+                        '''
+Uzayın derinliklerineki bir arenada amansız bir savaş oyunu.
+Hayaletlerin takımlar halinde birbiriyle savaştığı bir ortam.
+
+Oynanış
+
+"W", "A", "S", "D" --> Hareket etme
+"Space"           --> Zıplama
+"R"               --> Karakter küçültme
+"Mouse1"          --> Ateş etme
+"LShift"          --> Koşma
+''',
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          shadows: [
+                            Shadow(
+                                blurRadius: 10,
+                                color: const Color.fromARGB(255, 83, 83, 83),
+                                offset: Offset(0, 0)),
+                            Shadow(
+                                blurRadius: 30,
+                                color: const Color.fromARGB(255, 55, 44, 32),
+                                offset: Offset(2, 2)),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -148,33 +122,8 @@ class _ScaleButtonState extends State<ScaleButton> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: AssetImage('assets/images/siyah_arka_plan.jpg'),
+                image: AssetImage('assets/images/haritalar.png'),
               ),
-            ),
-            child: Column(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    'HARİTALARIMİZ',
-                    style: TextStyle(fontSize: 24, color: Colors.white),
-                  ),
-                ),
-                Expanded(
-                  flex: 4,
-                  child: Container(
-                    width: double.infinity,
-                    height: 400,
-                    decoration: BoxDecoration(
-                      color: Colors.amber,
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage('assets/images/haritalar.png'),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
             ),
           ),
         ),

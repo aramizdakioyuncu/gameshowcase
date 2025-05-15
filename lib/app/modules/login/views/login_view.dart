@@ -101,10 +101,15 @@ class LoginView extends StatelessWidget {
       body: Stack(
         children: [
           Image.asset(
-            'wallpapers/login.jpg',
+            'wallpapers/login.gif',
             fit: BoxFit.cover,
             height: Get.height,
             width: Get.width,
+          ),
+          Container(
+            height: Get.height,
+            width: Get.width,
+            color: Colors.black.withOpacity(0.75), // karanlık efekti
           ),
           Center(
             child: SizedBox(

@@ -15,12 +15,17 @@ class MediaView extends StatelessWidget {
         appBar: AppbarWidget.appbar1(),
         body: Stack(
           children: [
-            Image.asset(
-              'wallpapers/login.jpg',
-              fit: BoxFit.cover,
-              height: Get.height,
-              width: Get.width,
-            ),
+           Image.asset(
+            'wallpapers/login.gif',
+            fit: BoxFit.cover,
+            height: Get.height,
+            width: Get.width,
+          ),
+          Container(
+            height: Get.height,
+            width: Get.width,
+            color: Colors.black.withOpacity(0.75), // karanlık efekti
+          ),
             MenuWidget.menu(),
           ],
         ));

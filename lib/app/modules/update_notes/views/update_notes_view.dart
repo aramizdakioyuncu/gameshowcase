@@ -1,17 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gameshowcase/app/modules/news/controllers/news_controller.dart';
+import 'package:gameshowcase/app/modules/update_notes/controllers/update_notes_controller.dart';
 import 'package:gameshowcase/app/widgets/appbar_widget.dart';
 import 'package:gameshowcase/app/widgets/menu_widget.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class NewsView extends StatelessWidget {
-  const NewsView({super.key});
+class UpdateView extends StatelessWidget {
+  const UpdateView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(NewsController());
+    final controller = Get.put(UpdateController());
 
     return Scaffold(
       appBar: AppbarWidget.appbar1(),
@@ -32,42 +33,53 @@ class NewsView extends StatelessWidget {
             child: Column(
               children: [
                 MenuWidget.menu(),
-                Container(
-                  height: 900,
-                  width: Get.width,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/haberler1arka.png'),
-                      fit: BoxFit.cover,
+                Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(19.0),
+                        child: SelectableText(
+                          textAlign: TextAlign.center,
+                          'GÜNCELLEME NOTLARI',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 50),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                Text(
-                  'HABERLER',
-                  style: TextStyle(
-                    fontSize: 50,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white54,
-                    fontStyle: FontStyle.italic,
-                  ),
+                  ],
                 ),
                 Obx(
-                  () => controller.newsList.value == null
+                  () => controller.updateList.value == null
                       ? Center(
                           child: CupertinoActivityIndicator(),
                         )
                       : Column(
                           children: List.generate(
-                            controller.newsList.value!.length,
+                            controller.updateList.value!.length,
                             (index) {
-                              FetchNews newsItem =
-                                  controller.newsList.value![index];
+                              FetchUpdate updateItem =
+                                  controller.updateList.value![index];
 
                               return Padding(
                                 padding: const EdgeInsets.all(15.0),
                                 child: InkWell(
-                                  onTap: () =>
-                                      Get.toNamed('/NewsDetail/${newsItem.id}'),
+                                  onTap: () async {
+                                    final url = updateItem.youtubeUrl;
+                                    if (url != null && url.isNotEmpty) {
+                                      final uri = Uri.parse(url);
+                                      if (await canLaunchUrl(uri)) {
+                                        await launchUrl(uri,
+                                            mode:
+                                                LaunchMode.externalApplication);
+                                      } else {
+                                        Get.snackbar(
+                                            "Hata", "Bağlantı açılamadı: $url");
+                                      }
+                                    } else {
+                                      Get.snackbar("Uyarı",
+                                          "YouTube bağlantısı bulunamadı.");
+                                    }
+                                  },
                                   child: Container(
                                     color: Colors.black,
                                     child: Row(
@@ -76,7 +88,7 @@ class NewsView extends StatelessWidget {
                                       children: [
                                         CachedNetworkImage(
                                           imageUrl:
-                                              'http://185.93.68.107/api/Documents/cd071d3d-b85e-4a4e-bf89-f411297b89d5/${newsItem.bannerId}',
+                                              'http://185.93.68.107/api/Documents/cd071d3d-b85e-4a4e-bf89-f411297b89d5/${updateItem.bannerId}',
                                           height: 280,
                                           width: 500,
                                           fit: BoxFit.cover,
@@ -89,10 +101,10 @@ class NewsView extends StatelessWidget {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                newsItem.title,
+                                                updateItem.title,
                                                 style: TextStyle(fontSize: 30),
                                               ),
-                                              Text(newsItem.createdDate,
+                                              Text(updateItem.createdDate,
                                                   style:
                                                       TextStyle(fontSize: 10))
                                             ],

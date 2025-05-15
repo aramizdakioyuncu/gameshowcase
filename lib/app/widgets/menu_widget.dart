@@ -12,7 +12,7 @@ class MenuWidget {
           _buildNavButton('OYUN', 'gamebutton'),
           _buildNavButton('HABERLER', 'news'),
           _buildNavButton('ETKİNLİKLER', 'events'),
-          _buildNavButton('DESTEK', 'help'),
+          _buildNavButton('GÜNCELLEME NOTLARI', 'update'),
           _buildNavButton('ADMIN PANEL', 'dashboard'),
         ],
       ),

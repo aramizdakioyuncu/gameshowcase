@@ -323,6 +323,120 @@ class RestApiService {
   }
 
   //////event sonu
+  /////update baslangic
+
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  //haber detaylari
+  Future<http.Response?> updateDetail({required int id}) async {
+    var response = await request(
+      method: "GET",
+      endpoint: "/Contents/$id",
+      queryParams: {},
+    );
+
+    if (response != null && response.statusCode == 200) {
+      return response;
+    }
+
+    return response;
+  }
+
+///////////////////////////////////////////////////////////////////////////////////////////
+  ///haber listeleme
+  Future<http.Response?> updateList({required int page}) async {
+    var response = await request(
+      method: "GET",
+      endpoint: "/Contents/Search",
+      queryParams: {
+        "Type": "update",
+        "orderbycolumnname": "CreatedDate",
+        "ordertype": "desc",
+        "PageNumber": "$page",
+        "pagesize": "10",
+      },
+    );
+
+    if (response != null && response.statusCode == 200) {
+      log("Response Body: ${response.body}");
+      return response;
+    }
+
+    return response;
+  }
+
+  // /////////////////////////////////////////////////////////////////////////////////////////
+
+  Future<http.Response?> updateListToPanel({required int page}) async {
+    var response = await request(
+      method: "GET",
+      endpoint: "/Contents/SearchForPanel",
+      queryParams: {
+        "Type": "Update",
+        "orderbycolumnname": "CreatedDate",
+        "ordertype": "desc",
+        "PageNumber": "$page",
+        "pagesize": "10",
+      },
+    );
+
+    if (response != null && response.statusCode == 200) {
+      return response;
+    }
+    if (kDebugMode) {
+      print("Giriş başarısız!");
+    }
+    return response;
+  }
+
+///////////////////////////////////////////////////////////////////////////////////////////
+  Future<http.Response?> updateAdd(
+      {required String name,
+      required String title,
+      required String text,
+      required XFile banner,
+      required String youtubeUrl}) async {
+    var response = await request(
+      method: "POST",
+      endpoint: "/Contents",
+      file: {banner: "Banner"},
+      data: {
+        "Name": name,
+        "TitleJson": '{"tr": "$title", "en": "$title"}',
+        "TextJson": '{"tr": "$text", "en": "$text"}',
+        "Type": "Update",
+        "YoutubeUrl": youtubeUrl
+      },
+    );
+
+    if (response != null && response.statusCode == 201) {
+      return response;
+    }
+    if (kDebugMode) {
+      print("guncelleme eklenemedi!");
+      print(response);
+    }
+    return response;
+  }
+
+  Future<http.Response?> updateRemove({
+    required int id,
+  }) async {
+    var response = await request(
+      method: "DELETE",
+      endpoint: "/Contents/$id",
+    );
+
+    if (response != null && response.statusCode == 204) {
+      return response;
+    }
+    if (kDebugMode) {
+      print("guncelleme silinemedi!");
+      print(response);
+    }
+    return response;
+  }
+
+  //////update sonu
 
   // Kullanıcı giriş fonksiyonu (Login)
   Future<http.Response?> login(String username, String password) async {

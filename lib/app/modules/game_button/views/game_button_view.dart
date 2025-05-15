@@ -16,11 +16,16 @@ class GameButtonView extends StatelessWidget {
         body: Stack(
           children: [
             Image.asset(
-              'wallpapers/login.jpg',
-              fit: BoxFit.cover,
-              height: Get.height,
-              width: Get.width,
-            ),
+            'wallpapers/login.gif',
+            fit: BoxFit.cover,
+            height: Get.height,
+            width: Get.width,
+          ),
+          Container(
+            height: Get.height,
+            width: Get.width,
+            color: Colors.black.withOpacity(0.75), // karanlık efekti
+          ),
             MenuWidget.menu(),
             const Center(
               child: Text(

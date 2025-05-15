@@ -5,7 +5,6 @@ import 'package:gameshowcase/app/applist.dart';
 import 'package:gameshowcase/app/functions/functions.dart';
 import 'package:gameshowcase/app/models/user.dart';
 import 'package:get/get.dart';
-// ignore: deprecated_member_use, avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 
 class AppbarWidget {
@@ -18,38 +17,19 @@ class AppbarWidget {
     return PreferredSize(
       preferredSize: const Size.fromHeight(kToolbarHeight),
       child: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Get.changeThemeMode(
-                Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
-          },
-          icon: const Icon(
-            Icons.dark_mode,
-          ),
-        ),
         toolbarHeight: 104.0,
         title: InkWell(
           onTap: () {
             Functions.golink('home');
           },
           child: Image.asset(
-            'images/logo.png',
+            'assets/images/logo.png',
             fit: BoxFit.contain,
             height: 80,
           ),
         ),
         centerTitle: true,
         actions: [
-          ElevatedButton(
-            onPressed: () {},
-            child: const Row(
-              children: [
-                Icon(Icons.blur_circular),
-                SizedBox(width: 5),
-                Text('turkce'),
-              ],
-            ),
-          ),
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 14.0),
             child: VerticalDivider(),

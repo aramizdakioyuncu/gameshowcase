@@ -108,7 +108,7 @@ class _DashboardViewState extends State<DashboardView> {
                       color: Colors.black,
                     ),
                   ),
-                  onTap: () => _changeView(const AdminUpdatesView()),
+                  onTap: () => _changeView(const AdminUpdateView()),
                 ),
               ],
             ),

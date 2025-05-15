@@ -5,7 +5,6 @@ import 'package:gameshowcase/app/modules/news_detail/controllers/news_detail_con
 import 'package:gameshowcase/app/widgets/appbar_widget.dart';
 import 'package:gameshowcase/app/widgets/menu_widget.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 
 class NewsDetailView extends StatelessWidget {
   const NewsDetailView({super.key});
@@ -19,10 +18,15 @@ class NewsDetailView extends StatelessWidget {
       body: Stack(
         children: [
           Image.asset(
-            'wallpapers/login.jpg',
+            'wallpapers/login.gif',
             fit: BoxFit.cover,
             height: Get.height,
             width: Get.width,
+          ),
+          Container(
+            height: Get.height,
+            width: Get.width,
+            color: Colors.black.withOpacity(0.75), // karanlık efekti
           ),
           SingleChildScrollView(
             child: Column(

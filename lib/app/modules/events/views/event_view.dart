@@ -18,10 +18,15 @@ class EventView extends StatelessWidget {
       body: Stack(
         children: [
           Image.asset(
-            'wallpapers/login.jpg',
+            'wallpapers/login.gif',
             fit: BoxFit.cover,
             height: Get.height,
             width: Get.width,
+          ),
+          Container(
+            height: Get.height,
+            width: Get.width,
+            color: Colors.black.withOpacity(0.75), // karanlık efekti
           ),
           SingleChildScrollView(
             child: Column(
@@ -33,7 +38,7 @@ class EventView extends StatelessWidget {
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image:
-                          AssetImage('assets/images/etkinlikler_arkaplan.webp'),
+                          AssetImage('assets/images/etkinlikler_arkaplan.png'),
                     ),
                   ),
                 ),
