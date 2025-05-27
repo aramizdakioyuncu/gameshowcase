@@ -18,7 +18,7 @@ class EventView extends StatelessWidget {
       body: Stack(
         children: [
           Image.asset(
-            'wallpapers/login.gif',
+            'assets/wallpapers/login.gif',
             fit: BoxFit.cover,
             height: Get.height,
             width: Get.width,
@@ -32,30 +32,36 @@ class EventView extends StatelessWidget {
             child: Column(
               children: [
                 MenuWidget.menu(),
-                Container(
-                  height: 900,
-                  width: Get.width,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image:
-                          AssetImage('assets/images/etkinlikler_arkaplan.png'),
+                Padding(
+                  padding: const EdgeInsets.all(100.0),
+                  child: Container(
+                    height: 900,
+                    width: Get.width,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(
+                            'assets/images/etkinlikler_arkaplan.png'),
+                      ),
                     ),
                   ),
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(19.0),
-                        child: Text(
-                          textAlign: TextAlign.center,
-                          'ETKINLIKLER',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 50),
-                        ),
-                      ),
-                    ),
-                  ],
+                Text(
+                  'ETKİNLİKLER',
+                  style: TextStyle(
+                    fontSize: 64,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                          blurRadius: 10,
+                          color: const Color.fromARGB(255, 0, 0, 0),
+                          offset: Offset(0, 0)),
+                      Shadow(
+                          blurRadius: 30,
+                          color: const Color.fromARGB(255, 67, 159, 104),
+                          offset: Offset(3, 3)),
+                    ],
+                  ),
                 ),
                 Obx(
                   () => controller.eventsList.value == null

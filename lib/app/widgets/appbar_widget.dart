@@ -20,7 +20,12 @@ class AppbarWidget {
         toolbarHeight: 104.0,
         title: InkWell(
           onTap: () {
-            Functions.golink('home');
+            if (kDebugMode) {
+              Functions.golink('/');
+
+              return;
+            }
+            Functions.golink('https://server.aramizdakioyuncu.com/spooky');
           },
           child: Image.asset(
             'assets/images/logo.png',

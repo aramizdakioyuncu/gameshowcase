@@ -9,7 +9,7 @@ class MenuWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _buildNavButton('OYUN', 'gamebutton'),
+          _buildNavButton('HİKAYE', 'story'),
           _buildNavButton('HABERLER', 'news'),
           _buildNavButton('ETKİNLİKLER', 'events'),
           _buildNavButton('GÜNCELLEME NOTLARI', 'update'),

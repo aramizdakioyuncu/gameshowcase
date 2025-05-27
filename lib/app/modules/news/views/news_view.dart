@@ -18,7 +18,7 @@ class NewsView extends StatelessWidget {
       body: Stack(
         children: [
           Image.asset(
-            'wallpapers/login.gif',
+            'assets/wallpapers/login.gif',
             fit: BoxFit.cover,
             height: Get.height,
             width: Get.width,
@@ -45,10 +45,19 @@ class NewsView extends StatelessWidget {
                 Text(
                   'HABERLER',
                   style: TextStyle(
-                    fontSize: 50,
+                    fontSize: 64,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white54,
-                    fontStyle: FontStyle.italic,
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                          blurRadius: 10,
+                          color: const Color.fromARGB(255, 0, 0, 0),
+                          offset: Offset(0, 0)),
+                      Shadow(
+                          blurRadius: 30,
+                          color: const Color.fromARGB(255, 67, 159, 104),
+                          offset: Offset(3, 3)),
+                    ],
                   ),
                 ),
                 Obx(

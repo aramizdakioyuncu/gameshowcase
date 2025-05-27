@@ -18,7 +18,7 @@ class HomeView extends StatelessWidget {
       body: Stack(
         children: [
           Image.asset(
-            'wallpapers/login.gif',
+            'assets/wallpapers/login.gif',
             fit: BoxFit.cover,
             height: Get.height,
             width: Get.width,
@@ -46,16 +46,16 @@ class HomeView extends StatelessWidget {
                     child: SingleChildScrollView(
                       child: Text(
                         '''
-Uzayın derinliklerineki bir arenada amansız bir savaş oyunu.
+Uzayın derinliklerindeki bir arenada amansız bir savaş oyunu.
 Hayaletlerin takımlar halinde birbiriyle savaştığı bir ortam.
 
 Oynanış
 
 "W", "A", "S", "D" --> Hareket etme
-"Space"           --> Zıplama
-"R"               --> Karakter küçültme
+"Space"              --> Zıplama
+"R"                      --> Karakter küçültme
 "Mouse1"          --> Ateş etme
-"LShift"          --> Koşma
+"LShift"              --> Koşma
 ''',
                         style: TextStyle(
                           fontSize: 25,

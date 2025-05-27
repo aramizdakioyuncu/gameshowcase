@@ -28,6 +28,7 @@ dependencies:
   jwt_decode: ^0.3.1
   image_picker: ^0.8.5+3
   url_launcher: ^6.2.5
+  audioplayers: ^5.2.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -38,5 +39,6 @@ flutter:
   assets:
     - assets/
     - assets/images/
-
+    - assets/wallpapers/
+    - assets/sounds/
   uses-material-design: true

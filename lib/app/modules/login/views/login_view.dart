@@ -101,7 +101,7 @@ class LoginView extends StatelessWidget {
       body: Stack(
         children: [
           Image.asset(
-            'wallpapers/login.gif',
+            'assets/wallpapers/login.gif',
             fit: BoxFit.cover,
             height: Get.height,
             width: Get.width,

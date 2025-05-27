@@ -104,6 +104,7 @@ class RestApiService {
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////
+  ///news baslangıç
   Future<http.Response?> newsDetail({required int id}) async {
     var response = await request(
       method: "GET",
@@ -140,6 +141,7 @@ class RestApiService {
   }
 
   // /////////////////////////////////////////////////////////////////////////////////////////
+
 
   Future<http.Response?> newsListToPanel({required int page}) async {
     var response = await request(
@@ -209,10 +211,10 @@ class RestApiService {
     }
     return response;
   }
-  /////event baslangic
+  ///news sonu
 
   /////////////////////////////////////////////////////////////////////////////////////////////
-  //haber detaylari
+   /////event baslangic
   Future<http.Response?> eventsDetail({required int id}) async {
     var response = await request(
       method: "GET",
@@ -228,7 +230,7 @@ class RestApiService {
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-  ///haber listeleme
+ 
   Future<http.Response?> eventList({required int page}) async {
     var response = await request(
       method: "GET",
@@ -323,10 +325,10 @@ class RestApiService {
   }
 
   //////event sonu
-  /////update baslangic
+ 
 
   /////////////////////////////////////////////////////////////////////////////////////////////
-  //haber detaylari
+   /////update baslangic
   Future<http.Response?> updateDetail({required int id}) async {
     var response = await request(
       method: "GET",

@@ -19,7 +19,7 @@ class UpdateView extends StatelessWidget {
       body: Stack(
         children: [
           Image.asset(
-            'wallpapers/login.gif',
+            'assets/wallpapers/login.gif',
             fit: BoxFit.cover,
             height: Get.height,
             width: Get.width,
@@ -33,20 +33,23 @@ class UpdateView extends StatelessWidget {
             child: Column(
               children: [
                 MenuWidget.menu(),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(19.0),
-                        child: SelectableText(
-                          textAlign: TextAlign.center,
-                          'GÜNCELLEME NOTLARI',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 50),
-                        ),
-                      ),
-                    ),
-                  ],
+                Text(
+                  'GÜNCELLEME NOTLARI',
+                  style: TextStyle(
+                    fontSize: 64,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                          blurRadius: 10,
+                          color: const Color.fromARGB(255, 0, 0, 0),
+                          offset: Offset(0, 0)),
+                      Shadow(
+                          blurRadius: 30,
+                          color: const Color.fromARGB(255, 67, 159, 104),
+                          offset: Offset(3, 3)),
+                    ],
+                  ),
                 ),
                 Obx(
                   () => controller.updateList.value == null

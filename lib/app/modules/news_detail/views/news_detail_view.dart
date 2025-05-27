@@ -18,7 +18,7 @@ class NewsDetailView extends StatelessWidget {
       body: Stack(
         children: [
           Image.asset(
-            'wallpapers/login.gif',
+            'assets/wallpapers/login.gif',
             fit: BoxFit.cover,
             height: Get.height,
             width: Get.width,
@@ -26,46 +26,79 @@ class NewsDetailView extends StatelessWidget {
           Container(
             height: Get.height,
             width: Get.width,
-            color: Colors.black.withOpacity(0.75), // karanlık efekti
+            color: Colors.black.withOpacity(0.75),
           ),
           SingleChildScrollView(
             child: Column(
               children: [
                 MenuWidget.menu(),
-                Obx(
-                  () => controller.newsDetail.value == null
-                      ? CupertinoActivityIndicator()
-                      : Column(
-                          children: [
-                            CachedNetworkImage(
+                const SizedBox(height: 20),
+                Obx(() {
+                  final detail = controller.newsDetail.value;
+                  if (detail == null) return const CupertinoActivityIndicator();
+
+                  return Center(
+                    child: Container(
+                      width: Get.width > 600 ? 700 : Get.width * 0.9,
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.4),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Colors.white24),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.8),
+                            blurRadius: 16,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: CachedNetworkImage(
                               imageUrl:
-                                  'http://185.93.68.107/api/Documents/cd071d3d-b85e-4a4e-bf89-f411297b89d5/${controller.newsDetail.value?.bannerId}',
-                              height: 500,
-                              width: 500,
+                                  'http://185.93.68.107/api/Documents/cd071d3d-b85e-4a4e-bf89-f411297b89d5/${detail.bannerId}',
+                              height: 300,
+                              width: double.infinity,
                               fit: BoxFit.cover,
                             ),
-                            Text(
-                              controller.newsDetail.value!.title,
-                              style: TextStyle(
-                                fontSize: 50,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white54,
-                                fontStyle: FontStyle.italic,
-                              ),
+                          ),
+                          const SizedBox(height: 24),
+                          Text(
+                            detail.title,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 36,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontStyle: FontStyle.italic,
+                              shadows: [
+                                Shadow(
+                                  blurRadius: 8,
+                                  color: Colors.black,
+                                  offset: Offset(2, 2),
+                                ),
+                              ],
                             ),
-                            Text(
-                              controller.newsDetail.value!.text,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: const Color.fromARGB(136, 255, 255, 255),
-                                fontStyle: FontStyle.italic,
-                              ),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            detail.text,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.white70,
+                              height: 1.6,
                             ),
-                          ],
-                        ),
-                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+                const SizedBox(height: 40),
               ],
             ),
           ),

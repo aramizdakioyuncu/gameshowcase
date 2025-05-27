@@ -5,7 +5,7 @@ import 'package:gameshowcase/app/modules/admin_panel/admin_update_notes/admin_up
 import 'package:gameshowcase/app/modules/admin_panel/dashboard/dashboard_module.dart';
 import 'package:gameshowcase/app/modules/events/event_module.dart';
 import 'package:gameshowcase/app/modules/events_detail/events_detail_module.dart';
-import 'package:gameshowcase/app/modules/game_button/game_button_module.dart';
+import 'package:gameshowcase/app/modules/story/story_module.dart';
 import 'package:gameshowcase/app/modules/home/home_module.dart';
 import 'package:gameshowcase/app/modules/login/login_module.dart';
 import 'package:gameshowcase/app/modules/maps/maps_module.dart';
@@ -20,7 +20,7 @@ class AppPages {
     ...HomeModule.routes,
     ...LoginModule.routes,
     ...AddaccountModule.routes,
-    ...GameButtonModule.routes,
+    ...StoryModule.routes,
     ...NewsModule.routes,
     ...MediaModule.routes,
     ...EventModule.routes,
