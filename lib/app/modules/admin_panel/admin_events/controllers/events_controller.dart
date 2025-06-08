@@ -46,8 +46,6 @@ class AdminEventsController extends GetxController {
     TextEditingController titleController = TextEditingController();
     TextEditingController textController = TextEditingController();
     TextEditingController youtubeUrlController = TextEditingController();
-    
-
 
     Get.dialog(
       AlertDialog(
@@ -57,7 +55,8 @@ class AdminEventsController extends GetxController {
           children: [
             TextField(
               controller: nameController,
-              decoration: const InputDecoration(hintText: 'Etkinlik adını Girin'),
+              decoration:
+                  const InputDecoration(hintText: 'Etkinlik adını Girin'),
             ),
             TextField(
               controller: titleController,
@@ -91,8 +90,6 @@ class AdminEventsController extends GetxController {
                 text: textController.text,
                 banner: avatarFile!,
                 youtubeUrl: youtubeUrlController.text,
-                
-                
               );
 
               if (response != null && response.statusCode == 201) {
@@ -105,6 +102,77 @@ class AdminEventsController extends GetxController {
               }
             },
             child: const Text('Ekle'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void showEditEventsDialog(Events existingEvents) async {
+    // Haberi API'den çek
+    http.Response? response =
+        await App.apiService.eventsDetail(id: existingEvents.id);
+    String title = '';
+    String text = '';
+
+    if (response != null && response.statusCode == 200) {
+      var responseData = jsonDecode(response.body);
+      title = responseData['title'] ?? '';
+      text = responseData['text'] ?? '';
+    }
+
+    TextEditingController nameController =
+        TextEditingController(text: existingEvents.name);
+    TextEditingController titleController = TextEditingController(text: title);
+    TextEditingController textController = TextEditingController(text: text);
+    XFile? newBannerFile;
+
+    Get.dialog(
+      AlertDialog(
+        title: const Text('Etkinlik Düzenle'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: nameController,
+              decoration:
+                  const InputDecoration(hintText: 'Etkinlik adını girin'),
+            ),
+            TextField(
+              controller: titleController,
+              decoration:
+                  const InputDecoration(hintText: 'Etkinlik başlığını girin'),
+            ),
+            TextField(
+              controller: textController,
+              decoration:
+                  const InputDecoration(hintText: 'Etkinlik içeriğini girin'),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(onPressed: () => Get.back(), child: const Text('İptal')),
+          TextButton(
+            onPressed: () async {
+              http.Response? response = await App.apiService.eventsEdit(
+                id: existingEvents.id,
+                name: nameController.text,
+                title: titleController.text,
+                text: textController.text,
+              );
+
+              if (response != null &&
+                  (response.statusCode == 200 || response.statusCode == 204)) {
+                Get.back();
+                fetcheventsList();
+                Get.snackbar('Başarılı', 'Etkinlik başarıyla güncellendi!');
+              } else {
+                log('Hata: ${response?.statusCode}');
+                log('Hata: ${response?.body}');
+                Get.snackbar('Hata', 'Etkinlik güncellenemedi!');
+              }
+            },
+            child: const Text('Güncelle'),
           ),
         ],
       ),
@@ -131,6 +199,8 @@ class AdminEventsController extends GetxController {
           Events(
             id: element['id'],
             name: element['name'],
+            title: element['title']?['tr'] ?? '', // API'den gelen title
+            text: element['text']?['tr'] ?? '', // API'den gelen text
           ),
         );
       }
@@ -145,16 +215,22 @@ class AdminEventsController extends GetxController {
 class Events {
   int id;
   String name;
+  String title;
+  String text;
 
   Events({
     required this.id,
     required this.name,
+    required this.title,
+    required this.text,
   });
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'name': name,
+      'title': title,
+      'text': text,
     };
   }
 
@@ -162,6 +238,8 @@ class Events {
     return Events(
       id: json['id'] as int,
       name: json['name'] as String,
+      title: json['title']?['tr'] as String? ?? '',
+      text: json['text']?['tr'] as String? ?? '',
     );
   }
 }

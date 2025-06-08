@@ -41,11 +41,24 @@ class AdminUpdateView extends StatelessWidget {
                                   ((controller.pagecount.value - 1) * 10))
                               .toString()),
                           title: Text(controller.updateList.value![index].name),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.delete),
-                            onPressed: () {
-                              controller.removeUpdate(index);
-                            },
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon:
+                                    const Icon(Icons.edit), // ✏️ Kalem simgesi
+                                onPressed: () {
+                                  controller.showEditUpdateDialog(
+                                      controller.updateList.value![index]);
+                                },
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete),
+                                onPressed: () {
+                                  controller.removeUpdate(index);
+                                },
+                              ),
+                            ],
                           ),
                         );
                       },

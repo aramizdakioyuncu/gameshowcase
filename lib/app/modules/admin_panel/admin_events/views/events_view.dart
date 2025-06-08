@@ -41,11 +41,24 @@ class AdminEventsView extends StatelessWidget {
                                   ((controller.pagecount.value - 1) * 10))
                               .toString()),
                           title: Text(controller.eventsList.value![index].name),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.delete),
-                            onPressed: () {
-                              controller.removeEvents(index);
-                            },
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon:
+                                    const Icon(Icons.edit), // ✏️ Kalem simgesi
+                                onPressed: () {
+                                  controller.showEditEventsDialog(
+                                      controller.eventsList.value![index]);
+                                },
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete),
+                                onPressed: () {
+                                  controller.removeEvents(index);
+                                },
+                              ),
+                            ],
                           ),
                         );
                       },

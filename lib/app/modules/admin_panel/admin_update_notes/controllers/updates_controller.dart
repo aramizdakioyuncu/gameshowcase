@@ -4,6 +4,7 @@ import 'package:gameshowcase/app/services/app.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class AdminUpdateController extends GetxController {
   Rxn<List<Update>> updateList = Rxn();
@@ -112,6 +113,83 @@ class AdminUpdateController extends GetxController {
     );
   }
 
+  void showEditUpdateDialog(Update existingUpdate) async {
+    // Haberi API'den çek
+    http.Response? response =
+        await App.apiService.updateDetail(id: existingUpdate.id);
+    String title = '';
+    String text = '';
+    String youtube = '';
+
+    if (response != null && response.statusCode == 200) {
+      var responseData = jsonDecode(response.body);
+      title = responseData['title'] ?? '';
+      text = responseData['text'] ?? '';
+      youtube = existingUpdate.youtube
+      ;
+    }
+
+    TextEditingController nameController = TextEditingController(text: existingUpdate.name);
+    TextEditingController titleController = TextEditingController(text: title);
+    TextEditingController textController = TextEditingController(text: text);
+    TextEditingController youtubeUrlController = TextEditingController(text: youtube );
+
+    Get.dialog(
+      AlertDialog(
+        title: const Text('güncellemeyi Düzenle'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(hintText: 'güncelleme adını girin'),
+            ),
+            TextField(
+              controller: titleController,
+              decoration:
+                  const InputDecoration(hintText: 'güncelleme başlığını girin'),
+            ),
+            TextField(
+              controller: textController,
+              decoration:
+                  const InputDecoration(hintText: 'güncelleme içeriğini girin'),
+            ),
+            TextField(
+              controller: youtubeUrlController,
+              decoration: const InputDecoration(hintText: 'youtubeUrl Girin'),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(onPressed: () => Get.back(), child: const Text('İptal')),
+          TextButton(
+            onPressed: () async {
+              http.Response? response = await App.apiService.updateEdit(
+                id: existingUpdate.id,
+                name: nameController.text,
+                title: titleController.text,
+                text: textController.text,
+                youtubeUrl: youtubeUrlController.text,
+              );
+
+              if (response != null &&
+                  (response.statusCode == 200 || response.statusCode == 204)) {
+                Get.back();
+                fetchupdateList();
+                Get.snackbar('Başarılı', 'güncelleme notu başarıyla güncellendi!');
+              } else {
+                log('Hata: ${response?.statusCode}');
+                log('Hata: ${response?.body}');
+                Get.snackbar('Hata', 'güncelleme notu güncellenemedi!');
+              }
+            },
+            child: const Text('Güncelle'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -130,8 +208,9 @@ class AdminUpdateController extends GetxController {
       for (var element in responseData['data']) {
         updateList.value!.add(
           Update(
-            id: element['id'],
             name: element['name'],
+            id: element['id'],
+            youtube: element['youtubeUrl'],
           ),
         );
       }
@@ -146,16 +225,20 @@ class AdminUpdateController extends GetxController {
 class Update {
   int id;
   String name;
+  String youtube
+  ;
 
   Update({
     required this.id,
     required this.name,
+    required this.youtube,
   });
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'name': name,
+      'youtube': youtube,
     };
   }
 
@@ -163,6 +246,7 @@ class Update {
     return Update(
       id: json['id'] as int,
       name: json['name'] as String,
+      youtube: json['youtube'] as String,
     );
   }
 }

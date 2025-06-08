@@ -1,44 +1,44 @@
-name: gameshowcase
-description: "Game Product Web Project"
+  name: gameshowcase
+  description: "Game Product Web Project"
 
-publish_to: "none"
+  publish_to: "none"
 
-version: 1.0.0+1
+  version: 1.0.0+1
 
-environment:
-  sdk: ^3.5.3
+  environment:
+    sdk: ^3.5.3
 
-dependencies:
+  dependencies:
+    flutter:
+      sdk: flutter
+    flutter_web_plugins:
+      sdk: flutter
+    http: ^1.3.0
+
+    cupertino_icons: ^1.0.8
+    get: ^4.6.6
+    dio: ^5.8.0+1
+    get_storage: ^2.1.1
+    cached_network_image: ^3.4.1
+    armoyu_services: ^1.0.0+22
+    html: ^0.15.5
+    video_player: ^2.9.3
+    youtube_player_iframe: ^5.2.1
+    flutter_inappwebview: ^6.1.5
+    jwt_decode: ^0.3.1
+    image_picker: ^0.8.5+3
+    url_launcher: ^6.2.5
+    audioplayers: ^5.2.1
+  dev_dependencies:
+    flutter_test:
+      sdk: flutter
+
+    flutter_lints: ^5.0.0
+
   flutter:
-    sdk: flutter
-  flutter_web_plugins:
-    sdk: flutter
-  http: ^1.3.0
-
-  cupertino_icons: ^1.0.8
-  get: ^4.6.6
-  dio: ^5.8.0+1
-  get_storage: ^2.1.1
-  cached_network_image: ^3.4.1
-  armoyu_services: ^1.0.0+22
-  html: ^0.15.5
-  video_player: ^2.9.3
-  youtube_player_iframe: ^5.2.1
-  flutter_inappwebview: ^6.1.5
-  jwt_decode: ^0.3.1
-  image_picker: ^0.8.5+3
-  url_launcher: ^6.2.5
-  audioplayers: ^5.2.1
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-
-  flutter_lints: ^5.0.0
-
-flutter:
-  assets:
-    - assets/
-    - assets/images/
-    - assets/wallpapers/
-    - assets/sounds/
-  uses-material-design: true
+    assets:
+      - assets/
+      - assets/images/
+      - assets/wallpapers/
+      - assets/sounds/
+    uses-material-design: true

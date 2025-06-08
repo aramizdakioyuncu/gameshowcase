@@ -20,43 +20,6 @@ class RestApiService {
     String? accessToken,
   }) async {
     try {
-      if (file != null) {
-        var headers = {'accept': 'text/plain', 'Language-Id': 'tr'};
-        var request = http.MultipartRequest(
-          'POST',
-          Uri.parse("$baseUrl$endpoint").replace(queryParameters: queryParams),
-        );
-
-        // Body'yi ekle
-        if (data != null) {
-          for (var key in data.keys) {
-            request.fields[key] = data[key].toString();
-          }
-        }
-
-        final fileBytes = await file.keys.first.readAsBytes();
-
-        request.files.add(
-          http.MultipartFile.fromBytes(
-            file.values.first,
-            fileBytes,
-            filename: "avatar.jpg",
-          ),
-        ); // Eğer token varsa, Authorization başlığına ekle
-
-        if (accessToken != null) {
-          headers["Authorization"] = "Bearer $accessToken";
-        }
-        if (Applist.currentuser != null) {
-          headers["Authorization"] = "Bearer ${Applist.currentuser!.token}";
-        }
-
-        request.headers.addAll(headers);
-
-        http.StreamedResponse response = await request.send();
-        return await http.Response.fromStream(response);
-      }
-
       // URL oluştur
       Uri url =
           Uri.parse("$baseUrl$endpoint").replace(queryParameters: queryParams);
@@ -71,40 +34,85 @@ class RestApiService {
       if (accessToken != null) {
         headers["Authorization"] = "Bearer $accessToken";
       }
-      // Eğer token varsa, Authorization başlığına ekle
       if (Applist.currentuser != null) {
         headers["Authorization"] = "Bearer ${Applist.currentuser!.token}";
       }
 
       http.Response response;
 
-      if (method.toUpperCase() == "POST") {
-        response =
-            await http.post(url, headers: headers, body: jsonEncode(data));
-      } else if (method.toUpperCase() == "GET") {
-        response = await http.get(url, headers: headers);
-      } else if (method.toUpperCase() == "PUT") {
-        response =
-            await http.put(url, headers: headers, body: jsonEncode(data));
-      } else if (method.toUpperCase() == "DELETE") {
-        response =
-            await http.delete(url, headers: headers, body: jsonEncode(data));
+      // Dosya varsa (POST veya PUT için MultipartRequest)
+      if (file != null &&
+          (method.toUpperCase() == "POST" || method.toUpperCase() == "PUT")) {
+        var mpHeaders = {
+          'accept': 'text/plain',
+          'Language-Id': 'tr',
+        };
+        if (accessToken != null) {
+          mpHeaders["Authorization"] = "Bearer $accessToken";
+        }
+        if (Applist.currentuser != null) {
+          mpHeaders["Authorization"] = "Bearer ${Applist.currentuser!.token}";
+        }
+
+        var request = http.MultipartRequest(
+          method.toUpperCase(), // POST veya PUT
+          url,
+        );
+
+        // Body'yi ekle
+        if (data != null) {
+          for (var key in data.keys) {
+            request.fields[key] = data[key].toString();
+          }
+        }
+
+        final fileBytes = await file.keys.first.readAsBytes();
+        request.files.add(
+          http.MultipartFile.fromBytes(
+            file.values.first, // Alan adı (örneğin, "Banner")
+            fileBytes,
+            filename: "banner.jpg", // Dosya adı banner olarak
+          ),
+        );
+
+        request.headers.addAll(mpHeaders);
+
+        http.StreamedResponse streamedResponse = await request.send();
+        response = await http.Response.fromStream(streamedResponse);
       } else {
-        throw Exception("Geçersiz HTTP metodu: $method");
+        // Dosya yoksa normal HTTP isteği
+        if (method.toUpperCase() == "POST") {
+          response =
+              await http.post(url, headers: headers, body: jsonEncode(data));
+        } else if (method.toUpperCase() == "GET") {
+          response = await http.get(url, headers: headers);
+        } else if (method.toUpperCase() == "PUT") {
+          response =
+              await http.put(url, headers: headers, body: jsonEncode(data));
+        } else if (method.toUpperCase() == "DELETE") {
+          response =
+              await http.delete(url, headers: headers, body: jsonEncode(data));
+        } else {
+          throw Exception("Geçersiz HTTP metodu: $method");
+        }
       }
 
-      print("Durum Kodu: ${response.statusCode}");
-      print("Yanıt: ${response.body}");
+      if (kDebugMode) {
+        print("Durum Kodu: ${response.statusCode}");
+        print("Yanıt: ${response.body}");
+      }
 
       return response;
     } catch (e) {
-      print("API Hatası: $e");
+      if (kDebugMode) {
+        print("API Hatası: $e");
+      }
       return null;
     }
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////
-  ///news baslangıç
+  ///news baslangıc
   Future<http.Response?> newsDetail({required int id}) async {
     var response = await request(
       method: "GET",
@@ -142,7 +150,6 @@ class RestApiService {
 
   // /////////////////////////////////////////////////////////////////////////////////////////
 
-
   Future<http.Response?> newsListToPanel({required int page}) async {
     var response = await request(
       method: "GET",
@@ -166,6 +173,61 @@ class RestApiService {
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
+
+  Future<http.Response?> newsRemove({
+    required int id,
+  }) async {
+    var response = await request(
+      method: "DELETE",
+      endpoint: "/Contents/$id",
+    );
+
+    if (response != null && response.statusCode == 204) {
+      return response;
+    }
+    if (kDebugMode) {
+      print("haber silinemedi!");
+      print(response);
+    }
+    return response;
+  }
+
+  Future<http.Response?> newsEdit({
+    required String name,
+    required String title,
+    required String text,
+    required int id,
+  }) async {
+    var response = await request(
+      method: "PUT",
+      endpoint: "/Contents",
+      data: {
+        "id": id,
+        "name": name,
+        "rank": 0,
+        "youtubeUrl": "string",
+        "state": "Active",
+        // "title": '{"tr": "$title", "en": "$title"}',
+        // "text": '{"tr": "$text", "en": "$text"}',
+        "title": {
+          "tr": title,
+          "en": title,
+        },
+        "text": {
+          "tr": text,
+          "en": text,
+        },
+      },
+    );
+
+    if (kDebugMode) {
+      print("newsEdit Durum Kodu: ${response?.statusCode}");
+      print("newsEdit Yanıt: ${response?.body}");
+    }
+
+    return response;
+  }
+
   Future<http.Response?> newsAdd({
     required String name,
     required String title,
@@ -194,27 +256,10 @@ class RestApiService {
     return response;
   }
 
-  Future<http.Response?> newsRemove({
-    required int id,
-  }) async {
-    var response = await request(
-      method: "DELETE",
-      endpoint: "/Contents/$id",
-    );
-
-    if (response != null && response.statusCode == 204) {
-      return response;
-    }
-    if (kDebugMode) {
-      print("haber silinemedi!");
-      print(response);
-    }
-    return response;
-  }
   ///news sonu
 
   /////////////////////////////////////////////////////////////////////////////////////////////
-   /////event baslangic
+  /////event baslangic
   Future<http.Response?> eventsDetail({required int id}) async {
     var response = await request(
       method: "GET",
@@ -230,7 +275,7 @@ class RestApiService {
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
- 
+
   Future<http.Response?> eventList({required int page}) async {
     var response = await request(
       method: "GET",
@@ -305,6 +350,7 @@ class RestApiService {
     }
     return response;
   }
+  /////////////////////////////////////////
 
   Future<http.Response?> eventsRemove({
     required int id,
@@ -324,11 +370,45 @@ class RestApiService {
     return response;
   }
 
+  Future<http.Response?> eventsEdit({
+    required String name,
+    required String title,
+    required String text,
+    required int id,
+  }) async {
+    var response = await request(
+      method: "PUT",
+      endpoint: "/Contents",
+      data: {
+        "id": id,
+        "name": name,
+        "rank": 0,
+        "youtubeUrl": "string",
+        "state": "Active",
+        // "title": '{"tr": "$title", "en": "$title"}',
+        // "text": '{"tr": "$text", "en": "$text"}',
+        "title": {
+          "tr": title,
+          "en": title,
+        },
+        "text": {
+          "tr": text,
+          "en": text,
+        },
+      },
+    );
+
+    if (kDebugMode) {
+      print("newsEdit Durum Kodu: ${response?.statusCode}");
+      print("newsEdit Yanıt: ${response?.body}");
+    }
+
+    return response;
+  }
   //////event sonu
- 
 
   /////////////////////////////////////////////////////////////////////////////////////////////
-   /////update baslangic
+  /////update baslangic
   Future<http.Response?> updateDetail({required int id}) async {
     var response = await request(
       method: "GET",
@@ -435,6 +515,41 @@ class RestApiService {
       print("guncelleme silinemedi!");
       print(response);
     }
+    return response;
+  }
+
+  Future<http.Response?> updateEdit({
+    required String name,
+    required String title,
+    required String text,
+    required int id,
+    required String youtubeUrl,
+  }) async {
+    var response = await request(
+      method: "PUT",
+      endpoint: "/Contents",
+      data: {
+        "id": id,
+        "name": name,
+        "rank": 0,
+        "youtubeUrl": youtubeUrl,
+        "state": "Active",
+        "title": {
+          "tr": title,
+          "en": title,
+        },
+        "text": {
+          "tr": text,
+          "en": text,
+        },
+      },
+    );
+
+    if (kDebugMode) {
+      print("newsEdit Durum Kodu: ${response?.statusCode}");
+      print("newsEdit Yanıt: ${response?.body}");
+    }
+
     return response;
   }
 

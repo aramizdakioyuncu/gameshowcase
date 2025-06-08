@@ -90,14 +90,6 @@ class AppbarWidget {
                   itemBuilder: (BuildContext context) {
                     return [
                       const PopupMenuItem(
-                        value: "profile",
-                        child: Text("Profile"),
-                      ),
-                      const PopupMenuItem(
-                        value: "settings",
-                        child: Text("Settings"),
-                      ),
-                      const PopupMenuItem(
                         value: "logout",
                         child: Text("Logout"),
                       ),

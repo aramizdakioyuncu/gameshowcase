@@ -105,6 +105,75 @@ class AdminNewsController extends GetxController {
     );
   }
 
+  void showEditNewsDialog(News existingNews) async {
+    // Haberi API'den çek
+    http.Response? response =
+        await App.apiService.newsDetail(id: existingNews.id);
+    String title = '';
+    String text = '';
+
+    if (response != null && response.statusCode == 200) {
+      var responseData = jsonDecode(response.body);
+      title = responseData['title'] ?? '';
+      text = responseData['text'] ?? '';
+    }
+
+    TextEditingController nameController =
+        TextEditingController(text: existingNews.name);
+    TextEditingController titleController = TextEditingController(text: title);
+    TextEditingController textController = TextEditingController(text: text);
+
+    Get.dialog(
+      AlertDialog(
+        title: const Text('Haberi Düzenle'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(hintText: 'Haber adını girin'),
+            ),
+            TextField(
+              controller: titleController,
+              decoration:
+                  const InputDecoration(hintText: 'Haber başlığını girin'),
+            ),
+            TextField(
+              controller: textController,
+              decoration:
+                  const InputDecoration(hintText: 'Haber içeriğini girin'),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(onPressed: () => Get.back(), child: const Text('İptal')),
+          TextButton(
+            onPressed: () async {
+              http.Response? response = await App.apiService.newsEdit(
+                id: existingNews.id,
+                name: nameController.text,
+                title: titleController.text,
+                text: textController.text,
+              );
+
+              if (response != null &&
+                  (response.statusCode == 200 || response.statusCode == 204)) {
+                Get.back();
+                fetchnewsList();
+                Get.snackbar('Başarılı', 'Haber başarıyla güncellendi!');
+              } else {
+                log('Hata: ${response?.statusCode}');
+                log('Hata: ${response?.body}');
+                Get.snackbar('Hata', 'Haber güncellenemedi!');
+              }
+            },
+            child: const Text('Güncelle'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -125,6 +194,8 @@ class AdminNewsController extends GetxController {
           News(
             id: element['id'],
             name: element['name'],
+            title: element['title']?['tr'] ?? '', // API'den gelen title
+            text: element['text']?['tr'] ?? '', // API'den gelen text
           ),
         );
       }
@@ -139,16 +210,22 @@ class AdminNewsController extends GetxController {
 class News {
   int id;
   String name;
+  String title;
+  String text;
 
   News({
     required this.id,
     required this.name,
+    required this.title,
+    required this.text,
   });
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'name': name,
+      'title': title,
+      'text': text,
     };
   }
 
@@ -156,6 +233,8 @@ class News {
     return News(
       id: json['id'] as int,
       name: json['name'] as String,
+      title: json['title']?['tr'] as String? ?? '',
+      text: json['text']?['tr'] as String? ?? '',
     );
   }
 }
